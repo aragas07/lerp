@@ -1,0 +1,69 @@
+<div class="hold-transaction login-page">
+    <div class="login-box">
+        <div class="card">
+          <div class="card-body login-card-body">
+            <div class="col-12 text-center" style="margin-top: -30%">
+                <img src="assets/img/logo.png" class="col-7">
+            </div>
+            <p class="login-box-msg">LICENSURE EXAMINATION RESULTS PREDICTION</p>
+      
+            <form>
+              <div class="input-group mb-3">
+                <input type="email" class="form-control" name="email" placeholder="Email">
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-envelope"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="input-group mb-3">
+                <input type="password" class="form-control" name="password" placeholder="Password">
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-lock"></span>
+                  </div>
+                </div>
+                <div class="invalid-feedback" id="invalid">Your password is invalid</div>
+              </div>
+              <div class="row">
+                <div class="col-8">
+                  <div class="icheck-primary">
+                    <input type="checkbox" id="remember">
+                    <label for="remember">
+                      Remember Me
+                    </label>
+                  </div>
+                </div>
+                <!-- /.col -->
+                <div class="col-4">
+                  <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                </div>
+                <!-- /.col -->
+              </div>
+            </form>
+            <div class="row mt-4">
+                <p class="col-8 mb-0">
+                    <a href="forgot-password">I forgot my password</a>
+                </p>
+                <p class="col-4 mb-0 text-right">
+                    <a href="register" class="text-center">Sign up</a>
+                </p>
+            </div>
+          </div>
+        </div>
+      </div>
+</div>
+
+<script>
+    $(function(){
+        $("form").submit(function(e){
+            e.preventDefault()
+            var login = htall.crud({
+                url: 'route/login',
+                type: 'post',
+                data: new FormData(this)
+            })
+            login.success ? htall.location({auth:'examinee',href:'/home'}): $("#invalid").show()
+        })
+    })
+</script>

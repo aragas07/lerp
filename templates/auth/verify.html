@@ -1,0 +1,26 @@
+<div class="center-element">
+    <div class="card col-5">
+        <form class="card-body">
+            <label>Enter your verification code</label>
+            <input type="text" name="code" required id="" class="form-control">
+            <div id="invalid" class="invalid-feedback">The verification code is invalid</div>
+            <button class="btn btn-primary float-right mt-1">Submit</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(function(){
+        $("form").submit(function(e){
+            e.preventDefault()
+            var verify = htall.crud({
+                url: 'route/verify',
+                type: 'post',
+                data: new FormData(this)
+            })
+            console.log(verify)
+            verify.success ? htall.location({auth:'examinee',href:'/home'}): $("#invalid").show()
+            
+        })
+    })
+</script>

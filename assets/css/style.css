@@ -1,0 +1,30 @@
+.loading-section{
+    position: fixed;
+    background-color: rgba(255, 255, 255, 0.577);
+    caret-color: transparent;
+    height: 100%;
+    width: 100%;
+    z-index: 10;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+*, *::after, *::before{
+    transition: 1s;
+}
+
+.nav-link{
+    border: none;
+    background-color: transparent;
+}
+
+.center-element{
+    position: fixed;
+    height: 100%;
+    background-color: #ededed;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
