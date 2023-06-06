@@ -1,0 +1,118 @@
+<form class="col-12 mb-3">
+    <div class="row pr-0">
+        <input type="text" hidden name="userid" id="userid">
+        <div class="form-group col-8">
+            <label>Entrance Exam</label>
+            <input type="number" name="entrance" id="entrance" class="form-control">
+        </div>
+        <div class="form-group col-4">
+            <label>Total</label>
+            <input type="number" required name="entrancetotal" id="entrancetotal" class="form-control">
+        </div>
+    </div>
+    <div class="row pr-0">
+        <div class="form-group col-8">
+            <label>Mock Pre Board Examination</label>
+            <input type="number" name="mock" id="mock" class="form-control">
+        </div>
+        <div class="form-group col-4">
+            <label>Total</label>
+            <input type="number" required name="mocktotal" id="mocktotal" class="form-control">
+        </div>
+    </div>
+    <div class="form-group col-12 pr-0">
+        <label>GWA</label>
+        <input type="number" name="gwa" id="gwa" class="form-control">
+    </div>
+    <div class="col-12 text-right pr-0">
+        <button type="submit" style="width:100px" class="btn btn-primary mr-2">Submit</button>
+        <button type="button" id="lock" style="width:80px" class="btn btn-warning">Lock</button>
+    </div>
+</form>
+<script>
+    $(function(){
+        function isLock(lock){
+            if(lock == 1){
+                $("#lock").attr('class','btn btn-default')
+                $("#lock").text("Unlock")
+                $("#gwa").attr('disabled',true)
+                $("#entrance").attr('disabled',true)
+                $("#mock").attr('disabled',true)
+                $("#entrancetotal").attr('disabled',true)
+                $("#mocktotal").attr('disabled',true)
+            }else{
+                $("#lock").attr('class','btn btn-warning')
+                $("#gwa").attr('disabled',false)
+                $("#entrance").attr('disabled',false)
+                $("#mock").attr('disabled',false)
+                $("#entrancetotal").attr('disabled',false)
+                $("#mocktotal").attr('disabled',false)
+                $("#lock").text("lock")
+            }
+            loadData(false)
+        }
+        function loadData(b){
+            var lock = htall.getData({
+                url: 'route/isLock',
+                type:'post',
+                data: {id: id}
+            })
+            count = ""
+            $("#userid").val(lock.userid)
+            if(Object.keys(lock.score).length != 0){
+                if(b){
+                    $("#entrancetotal").val(lock.score[0].entrance_total)
+                    $("#mocktotal").val(lock.score[0].mock_total)
+                }
+            }
+            if(Object.keys(lock.grades).length != 0){
+                count = lock.grades[0].locking
+                if(b){
+                    $("#gwa").val(lock.grades[0].gwa)
+                    $("#entrance").val(lock.grades[0].entrance_exam)
+                    $("#mock").val(lock.grades[0].mock_exam)
+                    $("#entrancetotal").val(lock.grades[0].entrance_total)
+                    $("#mocktotal").val(lock.grades[0].mock_total)
+                    isLock(count)
+                }
+            }
+            return count
+        }
+        
+        var lock = loadData(true)
+        if(lock != "")
+        $("#lock").click(function(){
+            isLock(lock = lock == 1 ? 0:1)
+            htall.getData({
+                url:'route/lock',
+                type:'post',
+                data:{lock:lock,id:$("#userid").val()}
+            })
+        })
+
+        $("form").submit(function(e){
+            e.preventDefault()
+            Swal.fire({
+                title: 'Do you want to submit?',
+                showCancelButton: true,
+                confirmButtonText: 'submit',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log("Exmapmepremp")
+                    var submit = htall.crud({
+                        url: 'route/submitGrade',
+                        type: 'post',
+                        data: new FormData(this)
+                    })
+                    console.log(submit)
+                    htall.toast().fire({
+                        icon: submit.icon,
+                        title: submit.title
+                    })
+                } else if (result.isDenied) {
+                    Swal.fire('Changes are not saved', '', 'info')
+                }
+            })
+        })
+    })
+</script>

@@ -1,0 +1,143 @@
+
+<div class="col-12 row mt-3 mb-3">
+    <div class="col-9" style="display: flex; align-items: center;">
+        <div class="col-12">
+            <div class="form-group row">
+                <label class="col-3">First name :</label>
+                <input disabled type="text" id="fname" class="form-control auto col-9">
+            </div>
+            <div class="form-group row">
+                <label class="col-3">Middle name :</label>
+                <input disabled type="text" id="mname" class="form-control auto col-9">
+            </div>
+            <div class="form-group row">
+                <label class="col-3">Last name :</label>
+                <input disabled type="text" id="lname" class="form-control auto col-9">
+            </div>
+        </div>
+    </div>
+    <div class="col-3">
+        <div class="img-cont">
+            <img id="profilepic" src="assets/img/user.jpg" alt="" srcset="">
+        </div>
+    </div>
+    <div class="col-12 row pr-0">
+        <div class="form-group col-4">
+            <label>Date of Birth :</label>
+            <input disabled type="text" id="birth" class="form-control auto">
+        </div>
+        <div class="form-group col-3">
+            <label>Age :</label>
+            <input disabled type="text" disabled id="age" class="form-control auto">
+        </div>
+        <div class="form-group col-5 pr-0">
+            <label>LRN :</label>
+            <input disabled type="text" id="lrn" class="form-control auto">
+        </div>
+    </div>
+    <div class="form-group col-12">
+        <label>Birth Place :</label>
+        <input disabled type="text" id="birthplace" class="form-control auto">
+    </div>
+    <div class="col-12 row pr-0">
+        <div class="col-4 form-group">
+            <label>Religion :</label>
+            <input disabled type="text" id="religion" class="form-control auto">
+        </div>
+        <div class="col-3 form-group">
+            <label>Nationality :</label>
+            <input disabled type="text" id="nationality" class="form-control auto">
+        </div>
+        <div class="col-2 form-group">
+            <label>Gender :</label>
+            <input disabled type="text" id="gender" class="form-control">
+        </div>
+        <div class="col-3 form-group pr-0">
+            <label>Civil Status :</label>
+            <input disabled type="text" name="" id="status" class="form-control">
+        </div>
+    </div>
+    <div class="col-12 row pr-0">
+        <div class="form-group col-5">
+            <label>Contact Number :</label>
+            <input disabled type="text" name="contact" id="contact" class="form-control auto">
+        </div>
+        <div class="form-group col-7 pr-0">
+            <label>Email Address :</label>
+            <input disabled type="text" name="email" id="email" class="form-control auto">
+        </div>
+    </div>
+    <div class="col-12 form-group">
+        <label>Home Address :</label>
+        <input disabled type="text" name="home" id="home" class="form-control auto">
+    </div>
+    <div class="col-12 row pr-0">
+        <div class="col-9 form-group">
+            <label>School Last Attended :</label>
+            <input disabled type="text" name="schoollastattend" id="schoollastattend" class="form-control auto">
+        </div>
+        <div class="col-3 form-group pr-0">
+            <label>Year :</label>
+            <input disabled type="number" name="year" id="year" class="form-control auto">
+        </div>
+    </div>
+    <div class="col-12 form-group">
+        <label>Address of School</label>
+        <input disabled type="text" name="address" id="address" class="form-control auto">
+    </div>
+    <div class="col-12">
+        <label class="col-form-label-lg">Course Intended to Enroll</label>
+        <div class="row pr-0">
+            <div class="col-4">
+                <label>First Option :</label>
+                <input disabled type="text" name="foption" id="foption" class="form-control auto">
+            </div>
+            <div class="col-4">
+                <label>Second Option :</label>
+                <input disabled type="text" name="soption" id="soption" class="form-control auto">
+            </div>
+            <div class="col-4">
+                <label>Third Option :</label>
+                <input disabled type="text" name="toption" id="toption" class="form-control auto">
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var getAge=(birth)=>{
+            dob = new Date(birth)
+            var today = new Date()
+            return Math.floor((today-dob) / (365.25 * 24 * 60 * 60 * 1000))
+        },loadData=(user)=>{
+            $("#fname").val(user.first_name)
+            $("#mname").val(user.middle_name)
+            $("#lname").val(user.last_name)
+            if($.trim(user.profile).length > 0){
+                $("#profilepic").attr('src',user.profile)
+            }
+            $('#birth').val(user.birth)
+            $('#age').val(getAge(user.birth))
+            $("#lrn").val(user.lrn)
+            $("#birthplace").val(user.birthplace)
+            $("#religion").val(user.religion)
+            $("#nationality").val(user.nationality)
+            $("#gender").val(user.gender)
+            $("#contact").val(user.contact)
+            $("#email").val(user.username)
+            $("#status").val(user.civil_status)
+            $("#home").val(user.home_address)
+            $("#schoollastattend").val(user.school_last_attended)
+            $("#year").val(user.year)
+            $("#address").val(user.school_address)
+            $("#foption").val(user.first_option)
+            $("#soption").val(user.second_option)
+            $("#toption").val(user.third_option)
+        }
+
+    user = htall.getData({
+        url: 'route/getPersonInfo',
+        type: 'post',
+        data: {id:id}
+    })
+    loadData(user)
+</script>

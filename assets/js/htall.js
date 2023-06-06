@@ -1,4 +1,4 @@
-class Htall{
+class Htall extends Map{
     crud(d){
         var output = ""
         $(".loading-section").css('display','flex')
@@ -22,7 +22,23 @@ class Htall{
         return output
     }
 
-    getData(){
+    getData(d){
+        var output = ""
+        $.ajax({
+            url: d.url,
+            type: d.type,
+            data: d.data,
+            async: false,
+            dataType: 'JSON',
+            success: function(result){
+                output = result
+            },
+            error: function (request, status, error) {
+                console.log(request.responseText)
+                output = request.responseText
+            }
+        })
+        return output
     }
     
     swal(d){
@@ -35,16 +51,37 @@ class Htall{
 
     location(d){
         sessionStorage.setItem("auth",d.auth)
+        sessionStorage.setItem("data",JSON.stringify(d))
         window.location.href = d.href
     }
 
     include(main){
         const extend = $("#extend").html()
+        $("#extend").empty()
         $.get(`templates/${main}`,function(e){
             $("body").attr('class',"hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed")
             $("#component").html(e)
             $("#include").html(extend)
         })
     }
+
+    toast(){
+        return Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000
+        });
+    }
+
+    url(){
+        var url = window.location.pathname.split("/")
+        return "#"+url[1]
+    }
+    user(){
+        var data = JSON.parse(sessionStorage.getItem("data"))
+        return data.data
+    }
 }
+
 const htall = new Htall()

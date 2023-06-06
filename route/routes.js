@@ -2,12 +2,20 @@ export default{
     nav
 }
 const urlRoutes = {
-    404:{template: "templates/404.html", title: "Page not found"},
+    404:{template: "templates/layout/404.html", title: "Page not found"},
     "/": {template: "templates/auth/login.html", title:"LERP", auth: "none"},
     "/register":{template: "templates/auth/register.html", title: "Register", auth: "none"},
+    "/adminhome": {template: "templates/admin/dashboard.html", title: "Home", auth: 'admin'},
+    "/verify": {template: "templates/auth/verify.html", title: "Verify", auth: "verifying"},
     "/home": {template: "templates/examinee/dashboard.html", title: "Home", auth: 'examinee'},
-    "/adminhome": {template: "templates/adminhome.html", title: "Home", auth: 'admin'},
-    "/verify": {template: "templates/auth/verify.html", title: "Verify", auth: "verifying"}
+    "/subject": {template: "templates/examinee/subject.html", title: "Subject list", auth: 'examinee'},
+    "/performance": {template: "templates/examinee/performance.html", title: "Performance", auth: 'examinee'},
+    "/account": {template: "templates/examinee/account.html", title: "Account", auth: 'examinee'},
+    "/adminsubject": {template: "templates/admin/subject.html", title: "Subject", auth: 'admin'},
+    "/adminperformance": {template: "templates/admin/performance.html", title: "Performance", auth: 'admin'},
+    "/adminusers": {template: "templates/admin/user.html", title: "Users list", auth:'admin'},
+    "/manageAccount": {template: "templates/layout/manageAccount.html", title: "Manage", auth: sessionStorage.getItem('auth')},
+    "/schedule": {template: "templates/admin/schedule.html", title: "Schedule", auth: 'n/a'}
 }
 
 window.addEventListener('click', function(){
@@ -19,7 +27,7 @@ window.addEventListener('click', function(){
 function nav(){
     document.addEventListener("click",(e)=>{
         const {target} = e;
-        if(!target.matches("a")){
+        if(!target.matches("u")){
             return
         }
         e.preventDefault()
@@ -28,11 +36,13 @@ function nav(){
 }
 
 const urlRoute = (event)=>{
-    event = event || window.event
+    event = window.event
     event.preventDefault()
     window.history.pushState({}, "",event.target.href)
     urlLocationHandler()
 }
+
+// sessionStorage.setItem("auth","none")
 if(sessionStorage.length == 0){
     sessionStorage.setItem("auth","none")
 }

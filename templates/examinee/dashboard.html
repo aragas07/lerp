@@ -1,74 +1,77 @@
 
 
-<script>htall.include('examinee.html')</script>
+<script>htall.include('layout/layout.html')</script>
 <div id="extend">
-    <div class="content pt-4">
-        <div class="container-fluid">
-            <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">Bordered Table</h3>
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body">
-                <table class="table table-bordered">
-                  <thead>
-                    <tr>
-                      <th style="width: 10px">#</th>
-                      <th>Task</th>
-                      <th>Progress</th>
-                      <th style="width: 40px">Label</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>1.</td>
-                      <td>Update software</td>
-                      <td>
-                        <div class="progress progress-xs">
-                          <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
-                        </div>
-                      </td>
-                      <td><span class="badge bg-danger">55%</span></td>
-                    </tr>
-                    <tr>
-                      <td>2.</td>
-                      <td>Clean database</td>
-                      <td>
-                        <div class="progress progress-xs">
-                          <div class="progress-bar bg-warning" style="width: 70%"></div>
-                        </div>
-                      </td>
-                      <td><span class="badge bg-warning">70%</span></td>
-                    </tr>
-                    <tr>
-                      <td>3.</td>
-                      <td>Cron job running</td>
-                      <td>
-                        <div class="progress progress-xs progress-striped active">
-                          <div class="progress-bar bg-primary" style="width: 30%"></div>
-                        </div>
-                      </td>
-                      <td><span class="badge bg-primary">30%</span></td>
-                    </tr>
-                    <tr>
-                      <td>4.</td>
-                      <td>Fix and squish bugs</td>
-                      <td>
-                        <div class="progress progress-xs progress-striped active">
-                          <div class="progress-bar bg-success" style="width: 90%"></div>
-                        </div>
-                      </td>
-                      <td><span class="badge bg-success">90%</span></td>
-                    </tr>
-                  </tbody>
-                </table>
+  <div class="container-fluid">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Dashboard</h3>
+        </div>
+        <div class="card-body">
+          <div style="height:150px" class="m-auto">
+            <div class="description-block">
+              <span class="description-text">YOU ARE</span>
+              <h1 id="indicator">PASSED!</h1>
+              <span id="indicatorpercent" class="percentDesc">0%</span>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="description-block border-right">
+                <span id="mockpercent" class="percentDesc">0%</span>
+                <h3 id="mock"></h3>
+                <span class="description-text">MOCK BOARD EXAM GRADE</span>
               </div>
             </div>
+            <!-- /.col -->
+            <div class="col-sm-4">
+              <div class="description-block border-right">
+                <span id="suastpercent" class="percentDesc">0%</span>
+                <h3 id="suast"></h3>
+                <span class="description-text">SUAST GRADE</span>
+              </div>
+              <!-- /.description-block -->
+            </div>
+            <div class="col-sm-4">
+              <div class="description-block">
+                <span id="gwapercent" class="percentDesc">0%</span>
+                <h3 id="gwa"></h3>
+                <span class="description-text">GWA</span>
+              </div>
+              <!-- /.description-block -->
+            </div>
+          </div>
+          <!-- /.row -->
         </div>
-    </div>
+      </div>
+  </div>
     <script>
         $(function(){
-
+          var data = htall.getData({
+            url:'route/getGrades',
+            type:'POST',
+            data: {id: htall.user().user.id}
+          }),
+          gwa = parseFloat(data.gwa),
+          gwapercent = (1/gwa)*100,
+          mock = (data.mock_exam/data.mock_total)*100,
+          entrance = (data.entrance_exam/data.entrance_total)*100,
+          avg = ((gwapercent+mock+entrance)/300)*100
+          $("#indicator").text(avg > 70 ? "PASSED!":"FAILED!")
+          var percentage=(data,above,below)=>{
+            if(data > above) return "text-success"
+            else if(data > below) return "text-warning"
+            else return "text-danger"
+          }
+          $("#indicatorpercent").addClass(percentage(avg,70, 30)).text(avg.toFixed(2)+"%")
+          $("#gwapercent").addClass(percentage(gwapercent,50, 30)).text(gwapercent.toFixed(2)+"%")
+          $("#suastpercent").addClass(percentage(entrance,70,60)).text(entrance.toFixed(2)+"%")
+          $("#mockpercent").addClass(percentage(mock,75,70)).text(mock.toFixed(2)+"%")
+          $("#mock").text(data.mock_exam+"/"+data.mock_total)
+          $("#suast").text(data.entrance_exam+"/"+data.entrance_total)
+          $("#gwa").text(gwa.toFixed(2))
         })
     </script>
 </div>

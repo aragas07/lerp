@@ -1,0 +1,32 @@
+<form autocomplete="off">
+    <div class="form-group">
+        <label>Subject name</label>
+        <input type="text" name="name" id="name" class="form-control">
+    </div>
+    <div class="form-group">
+        <label>Description</label>
+        <input type="text" name="description" id="desc" class="form-control">
+    </div>
+    <input type="hidden" id="sid" name="id">
+    <button class="btn btn-primary float-right mb-2">Submit</button>
+</form>
+<script>
+    $("form").submit(function(e){
+        e.preventDefault()
+        var submit = htall.crud({
+            url: $(this).attr('action'),
+            type: 'POST',
+            data: new FormData(this)
+        })
+        if(submit.success){
+            loadData()
+            htall.toast().fire({
+                icon: 'success',
+                title: submit.msg
+            })
+            $(".modal").hide()
+        }else{
+            Swal.fire('error','Sorry we have a problem about the database connection','Error')
+        }
+    })
+</script>

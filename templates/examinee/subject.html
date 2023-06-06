@@ -1,0 +1,28 @@
+<script>htall.include('layout/layout.html')</script>
+<div id="extend">
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">Subject list</h4>
+      </div>
+      <div class="card-body">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Subject name</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+    <script>
+      $("tbody").html(
+        htall.getData({
+          url: 'route/subjectList'
+        }).tbody
+      )
+    </script>
+</div>

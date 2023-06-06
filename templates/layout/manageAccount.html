@@ -1,0 +1,294 @@
+<div class="preloader flex-column justify-content-center align-items-center">
+    <img class="animation__wobble" src="assets/img/logo.png" alt="AdminLTELogo" height="60" width="60">
+</div>
+
+<nav class="manage-header navbar navbar-expand navbar-dark">
+    <!-- Left navbar links -->
+    <a class="brand-link backtohome" style="width: auto!important; position:absolute!important; cursor:pointer">
+        <img src="assets/img/logo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <span class="brand-text text-light font-weight-light">Licensure examination result predictor</span>
+      </a>
+  
+    <!-- Right navbar links -->
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item dropdown">
+        <button class="nav-link" id="dropdown">
+          <i class="fas fa-caret-down"></i>
+        </button>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+          <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <li class="nav-item">
+              <div class="user-panel mt-3 pb-3 d-flex">
+                <div class="image">
+                  <img id="userprofile" src="assets/img/user.png" class="elevation-2" style="height: 60px; width: 60px; border-radius: 100%" alt="User Image">
+                </div>
+                <div class="info">
+                  <a href="#" class="d-block text-light username" style="font-size: 17px!important">Users name</a>
+                  <a href="#" id="usertype" class="d-block" style="font-size: 13px!important; color: #ffffff9d; font-weight:700">Users name</a>
+                </div>
+              </div>
+            </li>
+            <li class="nav-item text-center">
+              <a href="#" class="btn btn-primary backtohome">Back to home</a>
+            </li>
+            <li class="nav-item">
+              <button id="logout" class="nav-link">
+                <i class="fas fa-door-open"></i>
+                <p>
+                  Log out
+                </p>
+              </button>
+            </li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+</nav>
+<div class="hold-transaction contentwrapper">
+    <form class="card m-auto col-sm-8" style="max-width: 899px!important">
+        <div class="card-header">
+            <h4 class="card-title">Personal Information</h4>
+            <div class="card-tools">
+                <button type="button" id="submit" class="btn btn-primary">Update</button>
+            </div>
+        </div>
+        <div id="pinfo" class="card-body">
+            <div class="col-12 row">
+                <input type="text" name="userid" hidden id="userid">
+                <div class="col-9" style="display: flex; align-items: center;">
+                    <div class="col-12">
+                        <div class="form-group row">
+                            <label class="col-3">First name :</label>
+                            <input type="text" name="fname" id="fname" class="form-control auto col-9">
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-3">Middle name :</label>
+                            <input type="text" name="mname" id="mname" class="form-control auto col-9">
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-3">Last name :</label>
+                            <input type="text" name="lname" id="lname" class="form-control auto col-9">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="img-cont">
+                        <div id="coverimg"><h4 style="font-weight: 700">Pick image</h4></div>
+                        <img id="profilepic" src="assets/img/user.jpg" alt="" srcset="">
+                        <input type="file" hidden accept="image/png, image/gif, image/jpeg" id="default-btn">
+                        <input type="text" name="image" hidden id="imgtext">
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 pr-0" style="display:none" id="examineeinfo">
+                <div class="col-12 row pr-0">
+                    <div class="form-group col-4">
+                        <label>Date of Birth :</label>
+                        <input type="date" name="birth" id="birth" class="form-control auto">
+                    </div>
+                    <div class="form-group col-3">
+                        <label>Age :</label>
+                        <input type="number" disabled id="age" class="form-control auto">
+                    </div>
+                    <div class="form-group col-5 pr-0">
+                        <label>LRN :</label>
+                        <input type="number" name="lrn" id="lrn" class="form-control auto">
+                    </div>
+                </div>
+                <div class="form-group col-12">
+                    <label>Birth Place :</label>
+                    <input type="text" name="birthplace" id="birthplace" class="form-control auto">
+                </div>
+                <div class="col-12 row pr-0">
+                    <div class="col-4 form-group">
+                        <label>Religion :</label>
+                        <input type="text" name="religion" id="religion" class="form-control auto">
+                    </div>
+                    <div class="col-3 form-group">
+                        <label>Nationality :</label>
+                        <input type="text" name="nationality" id="nationality" class="form-control auto">
+                    </div>
+                    <div class="col-2 form-group">
+                        <label>Gender :</label>
+                        <select name="gender" id="gender" class="form-control auto">
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+                    <div class="col-3 form-group pr-0">
+                        <label>Civil Status :</label>
+                        <select name="status" id="status" class="form-control auto">
+                            <option value="Single">Single</option>
+                            <option value="Married">Married</option>
+                            <option value="Widowed">Widowed</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-12 row pr-0">
+                    <div class="form-group col-5">
+                        <label>Contact Number :</label>
+                        <input type="text" name="contact" id="contact" class="form-control auto">
+                    </div>
+                    <div class="form-group col-7 pr-0">
+                        <label>Email Address :</label>
+                        <input type="text" name="email" id="email" class="form-control auto">
+                    </div>
+                </div>
+                <div class="col-12 form-group">
+                    <label>Home Address :</label>
+                    <input type="text" name="home" id="home" class="form-control auto">
+                </div>
+                <div class="col-12 row pr-0">
+                    <div class="col-9 form-group">
+                        <label>School Last Attended :</label>
+                        <input type="text" name="schoollastattend" id="schoollastattend" class="form-control auto">
+                    </div>
+                    <div class="col-3 form-group pr-0">
+                        <label>Year :</label>
+                        <input type="number" name="year" id="year" class="form-control auto">
+                    </div>
+                </div>
+                <div class="col-12 form-group">
+                    <label>Address of School</label>
+                    <input type="text" name="address" id="address" class="form-control auto">
+                </div>
+                <div class="col-12">
+                    <label class="col-form-label-lg">Course Intended to Enroll</label>
+                    <div class="row pr-0">
+                        <div class="col-4">
+                            <label>First Option :</label>
+                            <input type="text" name="foption" id="foption" class="form-control auto">
+                        </div>
+                        <div class="col-4">
+                            <label>Second Option :</label>
+                            <input type="text" name="soption" id="soption" class="form-control auto">
+                        </div>
+                        <div class="col-4">
+                            <label>Third Option :</label>
+                            <input type="text" name="toption" id="toption" class="form-control auto">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="admininfo" style="display:none" class="col-12 pr-0">
+                <div class="col-12 row pr-0">
+                    <div class="form-group col-8">
+                        <label>Position :</label>
+                        <input type="text" name="position" id="position" class="form-control auto">
+                    </div>
+                    <div class="form-group col-4 pr-0">
+                        <label>Birth :</label>
+                        <input type="date" name="adminbirth" id="adminbirth" class="form-control auto">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    $(function(){
+        auth = htall.user().auth
+        url = auth == 'admin' ? 'route/updateadmin':'route/updateexaminee'
+        login = htall.user().login
+        user = htall.user().user
+        var getAge=(birth)=>{
+            dob = new Date(birth)
+            var today = new Date()
+            return Math.floor((today-dob) / (365.25 * 24 * 60 * 60 * 1000))
+        },
+        basicInfo=()=>{
+            $("#fname").val(login.first_name)
+            $("#mname").val(login.middle_name)
+            $("#lname").val(login.last_name)
+            if($.trim(user.profile).length > 0){
+                $("#profilepic").attr('src',user.profile)
+                $("#userprofile").attr('src',user.profile)
+                $("#imgtext").val(user.profile)
+            }
+        },
+        loadData=()=>{
+            basicInfo()
+            $('#birth').val(user.birth)
+            $('#age').val(getAge(user.birth))
+            $("#lrn").val(user.lrn)
+            $("#birthplace").val(user.birthplace)
+            $("#religion").val(user.religion)
+            $("#nationality").val(user.nationality)
+            $("#gender").val(user.gender)
+            $("#contact").val(user.contact)
+            $("#email").val(login.username)
+            $("#status").val(user.civil_status)
+            $("#home").val(user.home_address)
+            $("#schoollastattend").val(user.school_last_attended)
+            $("#year").val(user.year)
+            $("#address").val(user.school_address)
+            $("#foption").val(user.first_option)
+            $("#soption").val(user.second_option)
+            $("#toption").val(user.third_option)
+        },
+        adminData=()=>{
+            basicInfo()
+            $("#position").val(user.position)
+            $("#adminbirth").val(user.birth)
+        }
+        auth == 'admin' ? adminData():loadData()
+        $("#birth").change(function(){
+            $('#age').val(getAge($(this).val()))
+        })
+
+        $("#submit").click(()=>{
+            $("form").submit()
+        })
+
+        $("form").on('submit',function(e){
+            e.preventDefault()
+            var update = htall.crud({
+                url: url,
+                type: 'post',
+                data: new FormData(this)
+            })
+            update.success ? htall.location({auth:auth,href:"manageAccount",data:update}):
+            htall.toast().fire({icon:'error',title:'The data is unable to update'})
+
+        })
+        console.log(htall.user())
+        $("#usertype").text(auth.toUpperCase())
+        $("#userid").val(login.id)
+        $("#"+auth+"info").css('display','block')
+        $(".img-cont").css('height',$(".img-cont").css('width'))
+        $(".username").each(function(){
+            $(this).text(login.last_name+" "+login.first_name)
+        })
+
+        $("#coverimg").click(()=>{
+            $("#default-btn").click()
+        })
+        
+        $("#default-btn").change(function(){
+            const file = this.files[0]
+            if(file){
+                const reader = new FileReader()
+                reader.onload = function(){
+                    const result = reader.result
+                    $("#profilepic").attr("src",result)
+                    $("#imgtext").val(result)
+                }
+                reader.readAsDataURL(file)
+            }
+        })
+    })
+    $(".backtohome").click(()=>{
+        location.href = auth == 'admin' ? 'adminhome':'home'
+    })
+    $("#dropdown").click(()=>{
+        var menu = $(".dropdown-menu")
+        menu.css('display',menu.css('display') == 'block' ? 'none': 'block')
+    })
+    
+    $("#logout").click(()=>{
+      sessionStorage.setItem("auth",'none')
+      window.location.href= '/'
+    })
+    $("body").attr('class',"hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed")
+</script>

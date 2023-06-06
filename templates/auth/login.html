@@ -62,8 +62,10 @@
                 url: 'route/login',
                 type: 'post',
                 data: new FormData(this)
-            })
-            login.success ? htall.location({auth:'examinee',href:'/home'}): $("#invalid").show()
+            }),
+            auth = login.auth
+            console.log(login)
+            login.success ? htall.location({auth:auth,href:auth == 'examinee' ? 'home':'adminhome', data: login}): $("#invalid").show()
         })
     })
 </script>

@@ -1,0 +1,76 @@
+<script>htall.include('layout/layout.html')</script>
+<div id="extend">
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header text-right">
+                <button id="add" class="btn btn-default">Add Subject</button>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        var loadData = ()=>{
+            console.log("Example")
+            var data = htall.getData({url: 'route/getSubject'})
+            table = $(".table")
+            table.children('thead').html(data.thead)
+            table.children('tbody').html(data.tbody)
+            
+            $(".fa-edit").each(function(e){
+                $(this).click(()=>{
+                    $(".modal-head").children('h4').text("Update Subject")
+                    var value = $(this).parent().parent().siblings()
+                    var id = $(this).siblings()
+                    $.get("templates/modal/addSubject.html",function(e){
+                        $(".modal-body").html(e)
+                        $("form").attr('action','route/updateSubject')
+                        $("#sid").val(id.attr('id'))
+                        $("#name").val(value.eq(0).html())
+                        $("#desc").val(value.eq(1).html())
+                    })
+                    $(".modal").show()
+                })
+            })
+
+            $(".fa-trash").click(function(){
+                var id = $(this).attr('id')
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "Do you want to delete this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var data = htall.getData({
+                            url: 'route/deleteSubject',
+                            type: 'POST',
+                            data: {id: id}
+                        })
+                        loadData()
+                        htall.swal(data)
+                    }
+                })
+            })
+        }
+        $(function(){
+            loadData()
+            $(".modal-form").css('width',400)
+            $("#add").click(function(){
+                $(".modal-head").children('h4').text("Add Subject")
+                $.get("templates/modal/addSubject.html",function(e){
+                    $(".modal-body").html(e)
+                    $("form").attr('action','route/addSubject')
+                })
+                $(".modal").show()
+            })
+        })
+    </script>
+</div>
