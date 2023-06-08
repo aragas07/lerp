@@ -15,7 +15,7 @@ const urlRoutes = {
     "/adminperformance": {template: "templates/admin/performance.html", title: "Performance", auth: 'admin'},
     "/adminusers": {template: "templates/admin/user.html", title: "Users list", auth:'admin'},
     "/manageAccount": {template: "templates/layout/manageAccount.html", title: "Manage", auth: sessionStorage.getItem('auth')},
-    "/schedule": {template: "templates/admin/schedule.html", title: "Schedule", auth: 'n/a'}
+    "/importgrade": {template: "templates/admin/importgrade.html", title: "Import grade", auth: 'admin'}
 }
 
 window.addEventListener('click', function(){

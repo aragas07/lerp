@@ -18,23 +18,14 @@
         </div>
         <div class="card-footer">
           <div class="row">
-            <div class="col-sm-4">
+            <div class="col-sm-6">
               <div class="description-block border-right">
                 <span id="mockpercent" class="percentDesc">0%</span>
                 <h3 id="mock"></h3>
                 <span class="description-text">MOCK BOARD EXAM GRADE</span>
               </div>
             </div>
-            <!-- /.col -->
-            <div class="col-sm-4">
-              <div class="description-block border-right">
-                <span id="suastpercent" class="percentDesc">0%</span>
-                <h3 id="suast"></h3>
-                <span class="description-text">SUAST GRADE</span>
-              </div>
-              <!-- /.description-block -->
-            </div>
-            <div class="col-sm-4">
+            <div class="col-sm-6">
               <div class="description-block">
                 <span id="gwapercent" class="percentDesc">0%</span>
                 <h3 id="gwa"></h3>
@@ -67,10 +58,8 @@
           }
           $("#indicatorpercent").addClass(percentage(avg,70, 30)).text(avg.toFixed(2)+"%")
           $("#gwapercent").addClass(percentage(gwapercent,50, 30)).text(gwapercent.toFixed(2)+"%")
-          $("#suastpercent").addClass(percentage(entrance,70,60)).text(entrance.toFixed(2)+"%")
           $("#mockpercent").addClass(percentage(mock,75,70)).text(mock.toFixed(2)+"%")
-          $("#mock").text(data.mock_exam+"/"+data.mock_total)
-          $("#suast").text(data.entrance_exam+"/"+data.entrance_total)
+          $("#mock").text(data.mock_exam)
           $("#gwa").text(gwa.toFixed(2))
         })
     </script>

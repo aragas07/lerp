@@ -20,25 +20,22 @@
                 </div>
                 <!-- /.col -->
                 
-                <div class="col-md-4">
-                  <p class="text-center">
-                    <strong>Passers</strong>
-                  </p>
-
-    
-                  <div class="progress-group">
-                    Mock board exam
-                    <span id="mocklabel" class="float-right"><b></b></span>
-                    <div class="progress progress-sm">
-                      <div id="mock" class="progress-bar bg-primary" style="width: 80%"></div>
+                <div class="col-md-4" style="display: flex; align-items: center;">
+                  <div class="col-12">
+                    <div class="progress-group">
+                      Passed
+                      <span id="mocklabel" class="float-right"><b></b></span>
+                      <div class="progress progress-sm">
+                        <div id="passed" class="progress-bar bg-primary" style="width: 80%"></div>
+                      </div>
                     </div>
-                  </div>
-
-                  <div class="progress-group">
-                    Suast
-                    <span id="suastlabel" class="float-right"><b></b></span>
-                    <div class="progress progress-sm">
-                      <div id="suast" class="progress-bar bg-danger" style="width: 75%"></div>
+  
+                    <div class="progress-group">
+                      Failed
+                      <span id="suastlabel" class="float-right"><b></b></span>
+                      <div class="progress progress-sm">
+                        <div id="failed" class="progress-bar bg-danger" style="width: 75%"></div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -52,8 +49,8 @@
                 <div class="col-sm-6">
                   <div class="description-block border-right">
                     <span class="description-percentage text-success">0%</span>
-                    <h5 class="description-header">0</h5>
-                    <span class="description-text">TOTAL MOCK BOARD EXAMINERS PASSER</span>
+                    <h5 class="description-header"></h5>
+                    <span class="description-text">PASSED</span>
                   </div>
                   <!-- /.description-block -->
                 </div>
@@ -61,8 +58,8 @@
                 <div class="col-sm-6">
                   <div class="description-block">
                     <span class="description-percentage text-warning">0%</span>
-                    <h5 class="description-header">0</h5>
-                    <span class="description-text">TOTAL SUAST PASSERS</span>
+                    <h5 class="description-header"></h5>
+                    <span class="description-text">Failed</span>
                   </div>
                   <!-- /.description-block -->
                 </div>
@@ -88,15 +85,24 @@
         type: 'post'
       }),
       mock = 0,
-      entrance = 0,
-      mocktotal = 0,
-      entrancetotal = 0,
       label = [],
       data = [],
-      entrancedata = []
+      passed = 0,
+      failed = 0,
+      totalcount = 0,
+      gwa = parseFloat(dashboard.gwa),
+      gwapercent = (1/gwa)*100,
+      mock = (dashboard.mock_exam/100)*100,
+      avg = ((gwapercent+mock)/200)*100
+      console.log(dashboard)
       for(var i = 0; i < Object.keys(dashboard).length ;i++){
         var date = new Date(dashboard[i].register_date)
-        var year = date.getFullYear()
+        var year = date.getFullYear(),
+        gwa = parseFloat(dashboard[i].gwa),
+        gwapercent = (1/gwa)*100,
+        mock = (dashboard[i].mock_exam/100)*100,
+        avg = ((gwapercent+mock)/200)*100
+        avg > 70 ? passed++ : failed++
         if(label.length == 0){
           label.push(year)
           data.push(1)
@@ -110,16 +116,14 @@
               }
             }
           }
-        console.log("example "+data)
-        if(dashboard[i].mock_exam != 0) mocktotal++
-        if(dashboard[i].entrance_exam != 0) entrancetotal++
+          totalcount++
       }
 
       console.log("dashboard : "+label)
-      $("#mocklabel").html("<b>"+mock+"/</b>"+mocktotal)
-      $("#suastlabel").html("<b>"+entrance+"/</b>"+entrancetotal)
-      $("#mock").css('width',(mock/mocktotal)*100+"%")
-      $("#suast").css('width',(entrance/entrancetotal)*100+"%")
+      $("#mocklabel").html("<b>"+passed+"/</b>"+totalcount)
+      $("#suastlabel").html("<b>"+failed+"/</b>"+totalcount)
+      $("#passed").css('width',(passed/totalcount)*100+"%")
+      $("#failed").css('width',(failed/totalcount)*100+"%")
 
       
       var salesChartCanvas = $('#salesChart').get(0).getContext('2d')

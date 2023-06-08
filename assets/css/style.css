@@ -10,7 +10,7 @@
     align-items: center;
 }
 
-td .fa-edit{
+td .fa-edit, td .fa-chart-line{
     cursor:pointer;
     color: #4389fae7;
 }
@@ -33,7 +33,7 @@ td .fa-trash{
     color: #fa435be7;
 }
 
-td .fa-edit:hover{
+td .fa-edit:hover, td .fa-chart-line:hover{
     color: #77a3e9;
 }
 td .fa-trash:hover{

@@ -13,7 +13,7 @@ class UserController{
         echo $this->user->login($email,$password);
     }
 
-    public function register($fname,$mname,$lname,$email,$password,$usertype,$lrn){
+    public function register($fname,$mname,$lname,$email,$password,$usertype,$idnumber){
         $success = false;
         $icon = 'error';
         $msg = "Sorry $email is already exist";
@@ -33,7 +33,7 @@ class UserController{
                 $mail->mail($email);
                 $getId = $this->user->where("username = '$email'");
                 while($get = $getId->fetch_assoc()){
-                    $this->examinee->insert("users_id,register_date,lrn",$get['id'].",now(),$lrn");
+                    $this->examinee->insert("users_id,register_date,idnumber",$get['id'].",now(),$idnumber");
                 }
             }
         }

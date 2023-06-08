@@ -1,0 +1,41 @@
+<script>htall.include('layout/layout.html')</script>
+<div id="extend">
+    <div class="container-fluid row">
+        <div class="col-12 card">
+            <div class="card-header text-center">
+                <h4 class="card-title">Import grade</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <form class="mb-3 col-8">
+                        <label for="formFile" class="form-label">Input CSV file :</label>
+                        <div class="row">
+                            <div class="col-9">
+                                <input class="form-control" name="file" type="file" id="formFile">
+                            </div>
+                            <div class="col-3">
+                                <button class="btn btn-primary col-12">Submit</button>
+                            </div>
+                        </div>
+                        <div class="col-12 text-center">
+                            <h1>You must follow the file format</h1>
+                            <h3>ID #, Mock grades, GWA</h3>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function(){
+            $("form").submit(function(e){
+                e.preventDefault()
+                console.log(htall.crud({
+                    url: 'route/importFile',
+                    type: 'post',
+                    data: new FormData(this)
+                }))
+            })
+        })
+    </script>
+</div>

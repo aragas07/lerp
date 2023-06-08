@@ -11,7 +11,7 @@
                         <input autocomplete="off" class="form-control" type="search" id="search" placeholder="Search" aria-label="Search">
                         <div class="input-group-append">
                             <button class="btn btn-navbar" type="submit">
-                            <i class="fas fa-search text-light"></i>
+                                <i class="fas fa-search text-light"></i>
                             </button>
                         </div>
                     </div>
@@ -21,7 +21,7 @@
                 <table class="table table-bordered">
                     <thead class="text-center">
                         <tr>
-                            <th>LRN</th>
+                            <th>ID #</th>
                             <th>Name</th>
                             <th style="width: 50px">Age</th>
                             <th>Address</th>
@@ -60,11 +60,12 @@
                     })
                 })
                 
-                $(".fa-edit").click(function(){
-                    $(".modal-form").css({'width':'30%','min-width':'170px'})
-                    $(".modal-head").children('h4').text("Scores")
-                    var sid = $(this).siblings().attr('id')
-                    $.get("templates/modal/score.html", function(e){
+                $(".fa-chart-line").click(function(){
+                    $(".modal-form").css({'width':'40%','min-width':'170px'})
+                    $(".modal-head").children('h4').text("Prediction")
+                    var sid = $(this).attr('id')
+                    console.log("userid = "+sid)
+                    $.get("templates/modal/Predict.html", function(e){
                         id = sid
                         $(".modal-body").html(e)
                     })

@@ -77,7 +77,7 @@ class AdminController{
     }
 
     public function getUsers($type,$search,$year){
-        $data = $this->user->join('examinee')->where("YEAR(register_date) = '$year' and register_date is not null and (first_name like '%$search%' or middle_name like '%$search%' or last_name like '%$search%' or home_address like '%$search%' or lrn like '%$search%')");
+        $data = $this->user->join('examinee')->where("YEAR(register_date) = '$year' and register_date is not null and (first_name like '%$search%' or middle_name like '%$search%' or last_name like '%$search%' or home_address like '%$search%' or idnumber like '%$search%')");
         $tbody = "";
         while($d = $data->fetch_assoc()){
             $bday = new DateTime($d['birth']); 
@@ -85,7 +85,7 @@ class AdminController{
             $diff = $today->diff($bday);
             $name = $d['last_name']." ".$d['first_name']." ".$d['middle_name'];
             $tbody .="<tr>
-                <td>".$d['lrn']."</td>
+                <td>".$d['idnumber']."</td>
                 <td>$name</td>
                 <td>$diff->y</td>
                 <td>".$d['home_address']."</td>
@@ -93,7 +93,7 @@ class AdminController{
                 <td style='text-align: center'>
                     <div class='justify'>
                     <i id='".$d['users_id']."' class='fas fa-eye'></i>
-                        <i class='fas fa-edit'></i>
+                        <i id='".$d['idnumber']."' class='fas fa-chart-line'></i>
                     </div>
                 </td>
             </tr>";
@@ -153,11 +153,26 @@ class AdminController{
     }
 
     public function dashboard(){
-        $mockData = $this->examinee->join("exams")->where("lrn is not null");
+        $mockData = $this->examinee->query("SELECT * FROM examinee AS a INNER JOIN exams AS b ON a.idnumber = b.examinee_id");
         $mock = array();
         while($get = $mockData->fetch_assoc()){
             array_push($mock,$get);
         }
         echo json_encode($mock);
+    }
+
+    public function importFile($file){
+        $filename=$file["tmp_name"];
+        if($file["size"] > 0){
+            $file = fopen($filename, "r");
+            $num = 0;
+            while (($getData = fgetcsv($file, 10000, ",")) !== FALSE){
+                if($num > 0){
+                    $this->exams->insert("examinee_id,mock_exam,gwa","'".$getData[0]."','".$getData[1]."','".$getData[2]."'");
+                }
+                $num++;
+            }
+            fclose($file);
+        }
     }
 }

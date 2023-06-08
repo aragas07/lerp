@@ -14,6 +14,10 @@ class Eloquent{
         return $this->conn->query("SELECT * FROM $this->table WHERE $query");
     }
 
+    public function query($query){
+        return $this->conn->query($query);
+    }
+
     public function join($table){
         $this->table = "$this->table INNER JOIN $table ON $this->table.id = $table.$this->table"."_id";
         return $this;
