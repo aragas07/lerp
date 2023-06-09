@@ -33,7 +33,7 @@ class UserController{
                 $mail->mail($email);
                 $getId = $this->user->where("username = '$email'");
                 while($get = $getId->fetch_assoc()){
-                    $this->examinee->insert("users_id,register_date,idnumber",$get['id'].",now(),$idnumber");
+                    $this->examinee->insert("users_id,register_date,idnumber",$get['id'].",now(),'$idnumber'");
                 }
             }
         }
