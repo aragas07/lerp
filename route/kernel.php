@@ -12,7 +12,7 @@
         case "addSubject": $admin->addSubject($_POST['name'],$_POST['description']); break;
         case "updateSubject": $admin->updateSubject($_POST['name'],$_POST['description'],$_POST['id']); break;
         case "deleteSubject": $admin->deleteSubject($_POST['id']); break;
-        case "updateexaminee": $examinee->updateExaminee( ucfirst($_POST['fname']), ucfirst($_POST['mname']), ucfirst($_POST['lname']), $_POST['birth'], $_POST['idnumber'], $_POST['birthplace'], $_POST['religion'], $_POST['nationality'], $_POST['gender'], $_POST['status'], $_POST['contact'], $_POST['email'], $_POST['home'], $_POST['schoollastattend'], $_POST['year'], $_POST['address'], $_POST['foption'], $_POST['soption'], $_POST['toption'], $_POST['image'], $_POST['userid']); break;
+        case "updateexaminee": $examinee->updateExaminee( ucfirst($_POST['fname']), ucfirst($_POST['mname']), ucfirst($_POST['lname']), $_POST['birth'], $_POST['birthplace'], $_POST['religion'], $_POST['nationality'], $_POST['gender'], $_POST['status'], $_POST['contact'], $_POST['email'], $_POST['home'], $_POST['schoollastattend'], $_POST['year'], $_POST['address'], $_POST['foption'], $_POST['soption'], $_POST['toption'], $_POST['image'], $_POST['userid']); break;
         case "updateadmin": $admin->updateAdmin(ucfirst($_POST['fname']),ucfirst($_POST['mname']),ucfirst($_POST['lname']),$_POST['adminbirth'],$_POST['position'],$_POST['image'],$_POST['userid']); break;
         case "getUsers": $admin->getUsers($_POST['type'],$_POST['search'],$_POST['year']); break;
         case "getPersonInfo": $admin->getPersonInfo($_POST['id']); break;

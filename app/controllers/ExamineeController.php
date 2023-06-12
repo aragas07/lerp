@@ -32,10 +32,10 @@ class ExamineeController{
         echo json_encode($details);
     }
 
-    public function updateExaminee($fname,$mname,$lname,$birth,$idnumber,$birthplace,$religion,$nationality,$gender,$status,$contact,$email,$home,$schoollastattend,$year,$address,$foption,$soption,$toption,$image,$id){
+    public function updateExaminee($fname,$mname,$lname,$birth,$birthplace,$religion,$nationality,$gender,$status,$contact,$email,$home,$schoollastattend,$year,$address,$foption,$soption,$toption,$image,$id){
         $data = "";
         if($this->user->update("first_name = '$fname', middle_name = '$mname', last_name = '$lname'","id = $id")){
-            $update = $this->examinee->update("birth='$birth', birthplace='$birthplace', gender='$gender', civil_status='$status', contact='$contact', home_address='$home', first_option='$foption', idnumber='$idnumber', nationality='$nationality',
+            $update = $this->examinee->update("birth='$birth', birthplace='$birthplace', gender='$gender', civil_status='$status', contact='$contact', home_address='$home', first_option='$foption', nationality='$nationality',
             profile='$image', year='$year',religion='$religion', school_address='$address', school_last_attended='$schoollastattend', second_option='$soption', third_option='$toption'",
         "users_id = $id");
             $getUser = $this->user->where("id = '$id'");
