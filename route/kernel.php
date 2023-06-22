@@ -22,4 +22,5 @@
         case "adminDashboard": $admin->dashboard(); break;
         case "subjectList": $examinee->getSubject(); break;
         case "importFile": $admin->importFile($_FILES["file"]); break;
+        case "importGrade": $admin->importGrade($_POST['id'],$_POST['mock'],$_POST['gwa']); break;
     }

@@ -1,40 +1,66 @@
 <script>htall.include('layout/layout.html')</script>
 <div id="extend">
-    <div class="container-fluid row">
+    <div class="container-fluid">
         <div class="col-12 card">
             <div class="card-header text-center">
                 <h4 class="card-title">Import grade</h4>
             </div>
             <div class="card-body">
-                <div class="row">
-                    <form class="mb-3 col-8">
-                        <label for="formFile" class="form-label">Input CSV file :</label>
-                        <div class="row">
-                            <div class="col-9">
-                                <input class="form-control" name="file" type="file" id="formFile">
-                            </div>
-                            <div class="col-3">
-                                <button class="btn btn-primary col-12">Submit</button>
-                            </div>
+                <form id="csv" class="mb-3 col-8 m-auto">
+                    <label for="formFile" class="form-label">Input CSV file :</label>
+                    <div class="row">
+                        <div class="col-9">
+                            <input class="form-control" name="file" type="file" id="formFile">
                         </div>
-                        <div class="col-12 text-center">
-                            <h1>You must follow the file format</h1>
-                            <h3>ID #, Mock grades, GWA</h3>
+                        <div class="col-3">
+                            <button class="btn btn-primary col-12">Submit</button>
                         </div>
-                    </form>
-                </div>
+                    </div>
+                    <div class="col-12 text-center">
+                        <h1>You must follow the file format</h1>
+                        <h3>ID #, Mock grades, GWA</h3>
+                    </div>
+                </form>
+                <form id="manual" class="mt-5">
+                    <div class="row">
+                        <div class="col-md-4 col-12">
+                            <label>ID #</label>
+                            <input type="text" name="id" class="form-control form-control-sm">
+                        </div>
+                        <div class="col-md-4 col-12">
+                            <label>Mock grade</label>
+                            <input type="number" name="mock" step="0.000001" class="form-control form-control-sm">
+                        </div>
+                        <div class="col-md-4 col-12">
+                            <label>GWA</label>
+                            <input type="number" name="gwa" step="0.000001" class="form-control form-control-sm">
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary mt-3 float-right">Submit</button>
+                </form>
             </div>
         </div>
     </div>
     <script>
         $(function(){
-            $("form").submit(function(e){
+            $("#csv").submit(function(e){
                 e.preventDefault()
-                console.log(htall.crud({
+                var data = htall.crud({
                     url: 'route/importFile',
                     type: 'post',
                     data: new FormData(this)
-                }))
+                })
+                htall.toast().fire(data)
+            })
+            $("#manual").submit(function(e){
+                e.preventDefault()
+                var data = htall.crud({
+                    url: 'route/importGrade',
+                    type: 'post',
+                    data: new FormData(this)
+                })
+                htall.toast().fire(data)
             })
         })
     </script>

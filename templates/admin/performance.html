@@ -93,7 +93,8 @@
       gwa = parseFloat(dashboard.gwa),
       gwapercent = (1/gwa)*100,
       mock = (dashboard.mock_exam/100)*100,
-      avg = ((gwapercent+mock)/200)*100
+      avg = ((gwapercent+mock)/200)*100,
+      count = 0
       console.log(dashboard)
       for(var i = 0; i < Object.keys(dashboard).length ;i++){
         var date = new Date(dashboard[i].register_date)
@@ -102,7 +103,18 @@
         gwapercent = (1/gwa)*100,
         mock = (dashboard[i].mock_exam/100)*100,
         avg = ((gwapercent+mock)/200)*100
-        avg > 70 ? passed++ : failed++
+        count++
+        if(gwapercent < 42.8577){
+          failed++
+        }else{
+          avg > 44.87 ? passed++ : failed++
+        }
+        console.log(count)
+        var percentpass = (count/passed)*100,
+        percentfail = failed != 0 ? (count/failed)*100:0
+        $(".text-success").html(percentpass+"%")
+        $(".text-warning").html(percentfail+"%")
+        console.log("Exmaple")
         if(label.length == 0){
           label.push(year)
           data.push(1)

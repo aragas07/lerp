@@ -163,10 +163,14 @@ class AdminController{
 
     public function importFile($file){
         $filename=$file["tmp_name"];
+        $icon = 'error';
+        $title = 'We are unable to import the file due to a broken database connection or an invalid file.';
         if($file["size"] > 0){
             $file = fopen($filename, "r");
             $num = 0;
             while (($getData = fgetcsv($file, 10000, ",")) !== FALSE){
+                $icon = 'success';
+                $title = 'The file has been successfully uploaded';
                 if($num > 0){
                     $this->exams->insert("examinee_id,mock_exam,gwa","'".$getData[0]."','".$getData[1]."','".$getData[2]."'");
                 }
@@ -174,5 +178,16 @@ class AdminController{
             }
             fclose($file);
         }
+        echo json_encode(['icon'=>$icon,'title'=>$title]);
+    }
+    
+    public function importGrade($id,$mock,$gwa){
+        $icon = 'error';
+        $title = 'We are unable to import the file due to a broken database connection or an invalid file.';
+        if($this->exams->insert("examinee_id,mock_exam,gwa","'$id','$mock','$gwa'")){
+            $icon = 'success';
+            $title = "Success";
+        }
+        echo json_encode(['icon'=>$icon,'title'=>$title]);
     }
 }

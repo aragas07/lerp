@@ -106,7 +106,7 @@
     $(".username").each(function(){
       $(this).text(htall.user().login.last_name+" "+htall.user().login.first_name)
     })
-    $.get('templates/layout/sidebarmenu/'+htall.user().auth+".html", function(e){
+    $.get('templates/layout/sidebarmenu/'+htall.user().auth+'.html', function(e){
       $("#navigation").html(e)
       $(htall.url()).addClass('active')
     })
