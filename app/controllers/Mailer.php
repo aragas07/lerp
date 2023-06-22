@@ -14,8 +14,8 @@ class Mailer{
             $mail->isSMTP();
             $mail->Host       = 'smtp.gmail.com';
             $mail->SMTPAuth   = true;
-            $mail->Username   = 'argieragasd8d7@gmail.com';
-            $mail->Password   = 'rwdltqhyhkoysntp';
+            $mail->Username   = 'emilyatuba@gmail.com';
+            $mail->Password   = 'usqfqsdutkcfffad';
             $mail->SMTPSecure = 'tls';
             $mail->Port       = 587;
             
