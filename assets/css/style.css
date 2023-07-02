@@ -10,9 +10,13 @@
     align-items: center;
 }
 
-td .fa-edit, td .fa-chart-line{
-    cursor:pointer;
-    color: #4389fae7;
+.hdn{
+    display: none;
+}
+
+
+th{
+    text-align: center;
 }
 
 table{

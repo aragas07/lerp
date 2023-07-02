@@ -23,4 +23,5 @@
         case "subjectList": $examinee->getSubject(); break;
         case "importFile": $admin->importFile($_FILES["file"]); break;
         case "importGrade": $admin->importGrade($_POST['id'],$_POST['mock'],$_POST['gwa']); break;
+        case "getperformance": $admin->getperformance(); break;
     }

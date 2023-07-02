@@ -40,27 +40,36 @@
   </div>
     <script>
         $(function(){
+          console.log(htall.user())
           var data = htall.getData({
             url:'route/getGrades',
             type:'POST',
-            data: {id: htall.user().user.id}
+            data: {id: htall.user().user.idnumber}
           }),
           gwa = parseFloat(data.gwa),
-          gwapercent = (1/gwa)*100,
-          mock = (data.mock_exam/data.mock_total)*100,
-          entrance = (data.entrance_exam/data.entrance_total)*100,
-          avg = ((gwapercent+mock+entrance)/300)*100
-          $("#indicator").text(avg > 70 ? "PASSED!":"FAILED!")
-          var percentage=(data,above,below)=>{
-            if(data > above) return "text-success"
-            else if(data > below) return "text-warning"
-            else return "text-danger"
-          }
-          $("#indicatorpercent").addClass(percentage(avg,70, 30)).text(avg.toFixed(2)+"%")
-          $("#gwapercent").addClass(percentage(gwapercent,50, 30)).text(gwapercent.toFixed(2)+"%")
-          $("#mockpercent").addClass(percentage(mock,75,70)).text(mock.toFixed(2)+"%")
-          $("#mock").text(data.mock_exam)
-          $("#gwa").text(gwa.toFixed(2))
+            gwapercent = (1/gwa)*100,
+            mock = (data.mock_exam/100)*100,
+            avg = ((gwapercent+mock)/200)*100
+            console.log(gwapercent)
+            var percentage=(data,above,below)=>{
+                if(data > above) return "text-success"
+                else if(data > below) return "text-warning"
+                else return "text-danger"
+            }
+            if(gwapercent < 42.8577){
+                $("#indicator").text("FAILED!")
+                $("#indicatorpercent").addClass("text-danger").text(avg.toFixed(2)+"%")
+                alert("Exmapel")
+            }
+            else{
+                $("#indicator").text(avg > 44.87 ? "PASSED!":"FAILED!")
+                $("#indicatorpercent").addClass(percentage(avg,48.5, 44.86)).text(avg.toFixed(2)+"%")
+            }
+            $("#idnumber").text(data.examinee_id)
+            $("#gwapercent").addClass(percentage(gwapercent,48, 42.85)).text(gwapercent.toFixed(2)+"%")
+            $("#mockpercent").addClass(percentage(mock,49,46.8)).text(mock.toFixed(2)+"%")
+            $("#mock").text(data.mock_exam == "" ? "NONE":data.mock_exam)
+            $("#gwa").text(gwa.toFixed(2))
         })
     </script>
 </div>

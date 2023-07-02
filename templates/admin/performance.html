@@ -81,12 +81,13 @@
     $(function () {
       'use strict'
       var dashboard = htall.getData({
-        url: 'route/adminDashboard',
+        url: 'route/getperformance',
         type: 'post'
       }),
       mock = 0,
       label = [],
       data = [],
+      datafail = [],
       passed = 0,
       failed = 0,
       totalcount = 0,
@@ -95,10 +96,8 @@
       mock = (dashboard.mock_exam/100)*100,
       avg = ((gwapercent+mock)/200)*100,
       count = 0
-      console.log(dashboard)
       for(var i = 0; i < Object.keys(dashboard).length ;i++){
-        var date = new Date(dashboard[i].register_date)
-        var year = date.getFullYear(),
+        var year = dashboard[i].year,
         gwa = parseFloat(dashboard[i].gwa),
         gwapercent = (1/gwa)*100,
         mock = (dashboard[i].mock_exam/100)*100,
@@ -109,33 +108,46 @@
         }else{
           avg > 44.87 ? passed++ : failed++
         }
-        console.log(count)
-        var percentpass = (count/passed)*100,
-        percentfail = failed != 0 ? (count/failed)*100:0
-        $(".text-success").html(percentpass+"%")
-        $(".text-warning").html(percentfail+"%")
-        console.log("Exmaple")
+        // console.log(dashboard[i])
         if(label.length == 0){
           label.push(year)
-          data.push(1)
+          if(gwapercent < 42.8577){
+            data.push(0)
+            datafail.push(1)
+            console.log("percentage : "+gwapercent)
+          }else{
+            console.log(avg)
+            avg > 44.87 ? data.push(1) : datafail.push(1)
+          }
         }else
           for(var j = 0; j < label.length ;j++){
             if(label[j] == year){
+              if(gwapercent < 42.8577){
+                datafail[j]++
+              }else{
+                avg > 44.87 ? data[j]++ : datafail[j]++
+                console.log(avg+" > "+datafail[j])
+              }
             }else{
               if(j+1 == label.length){
                 label.push(year)
-                data.push(1)
+                data.push(0)
+                datafail.push(0)
               }
             }
           }
           totalcount++
       }
 
-      console.log("dashboard : "+label)
+      var percentpass = (passed/totalcount)*100,
+      percentfail = (failed/totalcount)*100
+      console.log("dashboard : "+data)
       $("#mocklabel").html("<b>"+passed+"/</b>"+totalcount)
       $("#suastlabel").html("<b>"+failed+"/</b>"+totalcount)
-      $("#passed").css('width',(passed/totalcount)*100+"%")
-      $("#failed").css('width',(failed/totalcount)*100+"%")
+      $("#passed").css('width',percentpass+"%")
+      $("#failed").css('width',percentfail+"%")
+      $(".text-success").html(percentpass.toFixed(2)+"%")
+      $(".text-warning").html(percentfail.toFixed(2)+"%")
 
       
       var salesChartCanvas = $('#salesChart').get(0).getContext('2d')
@@ -144,7 +156,7 @@
         labels: label,
         datasets: [
           {
-            label: 'Mock Exam',
+            label: 'Passers',
             backgroundColor: 'rgba(60,141,188,0.9)',
             borderColor: 'rgba(60,141,188,0.8)',
             pointRadius: false,
@@ -153,6 +165,17 @@
             pointHighlightFill: '#fff',
             pointHighlightStroke: 'rgba(60,141,188,1)',
             data: data
+          },
+          {
+            label: 'Failures',
+            backgroundColor: 'rgba(245, 17, 21,0.9)',
+            borderColor: 'rgba(245, 17, 21,0.8)',
+            pointRadius: true,
+            pointColor: '#3b8bba',
+            pointStrokeColor: 'rgba(60,141,188,1)',
+            pointHighlightFill: '#fff',
+            pointHighlightStroke: 'rgba(60,141,188,1)',
+            data: datafail
           }
         ]
       }

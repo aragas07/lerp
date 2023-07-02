@@ -153,32 +153,68 @@ class AdminController{
     }
 
     public function dashboard(){
-        $mockData = $this->examinee->query("SELECT * FROM examinee AS a INNER JOIN exams AS b ON a.idnumber = b.examinee_id");
-        $mock = array();
+        $mockData = $this->exams->query("SELECT count(*) AS count,year FROM exams GROUP BY year");
         while($get = $mockData->fetch_assoc()){
-            array_push($mock,$get);
+            $count[] = $get['count'];
+            $year[] = $get['year'];
         }
-        echo json_encode($mock);
+        echo json_encode(['count'=>$count, 'year'=>$year]);
     }
 
     public function importFile($file){
-        $filename=$file["tmp_name"];
         $icon = 'error';
         $title = 'We are unable to import the file due to a broken database connection or an invalid file.';
+        $tbody = "";
+        $format = false;
+        $filename=$file["tmp_name"];
         if($file["size"] > 0){
             $file = fopen($filename, "r");
             $num = 0;
             while (($getData = fgetcsv($file, 10000, ",")) !== FALSE){
                 $icon = 'success';
                 $title = 'The file has been successfully uploaded';
-                if($num > 0){
-                    $this->exams->insert("examinee_id,mock_exam,gwa","'".$getData[0]."','".$getData[1]."','".$getData[2]."'");
+                $idn = strtolower($getData[0]);
+                if($num == 0){
+                    if(($idn != 'id #' && $idn != 'id#') || strtolower($getData[1]) != 'name' || strtolower($getData[2]) != 'mock grades' || strtolower($getData[3]) != 'gwa'){
+                        $title = 'We are unable to import the file due to file format, you need to follow the format.';
+                        break;
+                    }
+                }else if($num > 0){
+                    $tbody .= "<tr>
+                        <td>".$getData[0]."</td>
+                        <td>".$getData[1]."</td>
+                        <td>".$getData[2]."</td>
+                        <td>".$getData[3]."</td>
+                        <td hidden class='hidden'></td>
+                        <td hidden class='text-center hidden'><i class='fas fa-eye'></i></td>
+                    </tr>";
+                    $format = true;
+                    $exist = $this->exams->where("examinee_id = '$getData[0]'");
+                    if($exist->num_rows == 0)
+                        $this->exams->insert("examinee_id,mock_exam,gwa,year","'".$getData[0]."','".$getData[2]."','".$getData[3]."',YEAR(CURDATE())");
+                    else{
+                        $getID = $exist->fetch_assoc();
+                        $this->exams->update("mock_exam = '$getData[2]', gwa = '$getData[3]'","id = {$getID['id']}");
+                    }
                 }
                 $num++;
             }
             fclose($file);
         }
-        echo json_encode(['icon'=>$icon,'title'=>$title]);
+        echo json_encode(['toast'=>['icon'=>$icon,'title'=>$title],'tbody'=>$tbody,'format'=>$format]);
+    }
+
+    public function sample(){
+        $res = $this->exams->where("examinee_id ='2015-1576'");
+        echo json_encode(['res'=>$res->num_rows]);
+    }
+
+    public function getperformance(){
+        $res = $this->exams->query("SELECT * FROM exams ORDER BY year ASC");
+        while($r = $res->fetch_assoc()){
+            $data[] = $r;
+        }
+        echo json_encode($data);
     }
     
     public function importGrade($id,$mock,$gwa){

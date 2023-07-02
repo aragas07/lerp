@@ -23,6 +23,10 @@ class Eloquent{
         return $this;
     }
 
+    public function truncate(){
+        return $this->conn->query("TRUNCATE $this->table");
+    }
+
     public function insert($column,$data){
         return $this->conn->query("INSERT INTO $this->table ($column) VALUES($data)");
     }

@@ -55,6 +55,13 @@ class Htall extends Map{
         window.location.href = d.href
     }
 
+    importGrade(d){
+        if(d.store) sessionStorage.setItem("importgrade",d.data)
+        else{
+            return sessionStorage.getItem("importgrade")
+        }
+    }
+
     include(main){
         const extend = $("#extend").html()
         $("#extend").empty()
