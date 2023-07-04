@@ -1,0 +1,59 @@
+<div class="card-header pl-0">
+    <div class="card-title">
+        <i class="fas fa-search"></i>
+        <input type="search" placeholder="Search" name="" id="search" class="form-control form-control-sm pl-4">
+    </div>
+</div>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th colspan="2">File name</th>
+        </tr>
+    </thead>
+    <tbody id="filetable">
+        <tr>
+            <td></td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>
+<div class="card-footer clearfix pt-0 pr-0">
+    <ul class="pagination pagination-sm m-0 float-right">
+    </ul>
+  </div>
+<script>
+    $(function(){
+        var getdata=(search)=>{
+            paging = htall.getData({url: 'route/paging', data:{search:search}})
+            console.log(paging)
+            $(".pagination").html(paging.paging)
+            $("#filetable").html(paging.tbody)
+            $(".page-item").click(function(){
+                    $(".page-number.active").removeClass('active')
+                if($(this).attr("class").trim() == 'page-item page-number'){
+                    $(this).addClass('active')
+                }
+                if($(this).index() == 0){
+                    $(".page-number").eq(0).addClass('active')
+                }else if($(this).index()+1 == $(".page-item").length)
+                    $(".page-number").eq($(".page-item").length - 3).addClass('active')
+                getpage = htall.getData({url:'route/getpage', data:{search:search,start:$(this).attr('value')}})
+                $("#filetable").html(getpage.tbody)
+            })
+            $(".fa-eye").click(function(){
+                $(".viewfile").show()
+                $(".viewfile-form").css({'width':'70%','min-width':'170px'})
+                $(".viewfile-head").children('h4').text($(this).parent().parent().siblings().text())
+                sid = $(this).attr("value")
+                $.get("templates/modal/historyfile.html", function(e){
+                    id = sid
+                    $(".viewfile-body").html(e)
+                })
+            })
+        }
+        getdata('')
+        $("#search").keyup(function(){
+            getdata($(this).val())
+        })
+    })
+</script>

@@ -5,12 +5,35 @@ class AdminController{
     private $user;
     private $examinee;
     private $exams;
+    private $filelist;
     function __construct(){
         $this->subject = new Subject();
         $this->admin = new Admin();
         $this->user = new Users();
         $this->examinee = new Examinee();
         $this->exams = new Exams();
+        $this->filelist = new Filelist();
+    }
+
+    public function getdff(){
+        extract($_POST);
+        $data = $this->exams->where("files_id = $id");
+        $tbody = '';
+        while($row = $data->fetch_assoc()){
+            $gwa = floatval($row['gwa']);
+            $gwapercent = (1/$gwa)*100;
+            $mock = ($row['mock_exam']/100)*100;
+            $avg = (($gwapercent+$mock)/200)*100;
+            $text = $avg > 44.87 ? "Passed":"Failed";
+            $tbody .= "<tr>
+                <td>{$row['examinee_id']}</td>
+                <td>{$row['name']}</td>
+                <td>{$row['mock_exam']}</td>
+                <td>{$row['gwa']}</td>
+                <td>$text</td>
+            </tr>";
+        }
+        echo json_encode(['tbody'=>$tbody]);
     }
 
     public function getSubject(){
@@ -167,9 +190,11 @@ class AdminController{
         $tbody = "";
         $format = false;
         $filename=$file["tmp_name"];
+        $name = explode(".",$file['name']);
         if($file["size"] > 0){
             $file = fopen($filename, "r");
             $num = 0;
+            $fileid = $this->filelist->insertfile($name[0])->fetch_assoc();
             while (($getData = fgetcsv($file, 10000, ",")) !== FALSE){
                 $icon = 'success';
                 $title = 'The file has been successfully uploaded';
@@ -189,13 +214,7 @@ class AdminController{
                         <td hidden class='text-center hidden'><i class='fas fa-eye'></i></td>
                     </tr>";
                     $format = true;
-                    $exist = $this->exams->where("examinee_id = '$getData[0]'");
-                    if($exist->num_rows == 0)
-                        $this->exams->insert("examinee_id,mock_exam,gwa,year","'".$getData[0]."','".$getData[2]."','".$getData[3]."',YEAR(CURDATE())");
-                    else{
-                        $getID = $exist->fetch_assoc();
-                        $this->exams->update("mock_exam = '$getData[2]', gwa = '$getData[3]'","id = {$getID['id']}");
-                    }
+                    $this->exams->insert("examinee_id,name,mock_exam,gwa,year,files_id","'".$getData[0]."','".$getData[1]."','".$getData[2]."','".$getData[3]."',YEAR(CURDATE()),{$fileid['id']}");
                 }
                 $num++;
             }

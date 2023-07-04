@@ -3,10 +3,12 @@ class UserController{
     private $examinee;
     private $user;
     private $exams;
+    private $filelist;
     public function __construct(){
         $this->examinee = new Examinee();
         $this->user = new Users();
         $this->exams = new Exams();
+        $this->filelist = new Filelist();
     }
 
     public function login($email,$password){
@@ -48,6 +50,53 @@ class UserController{
             $success = true;
         }
         echo $this->user->login($email,$password);
+    }
+
+    public function paging(){
+        extract($_POST);
+        $result = $this->filelist->where("filename like '%$search%' limit 10");
+        $tbody = '';
+        while($row = $result->fetch_assoc()){
+            $tbody .= "<tr>
+                <td>{$row['filename']}</td>
+                <td style='width: 70px'>
+                    <div class='fw justify-between'>
+                        <i value='{$row['id']}' class='fas fa-eye'></i>
+                        <i hidden class='fas fa-file-download'></i>
+                    </div>
+                </td>
+            </tr>";
+        }
+        $rownum = $this->filelist->where("filename like '%$search%'");
+        $pageNumber = ceil($rownum->num_rows/10);
+        $paging = '<li class="page-item" value="0"><a class="page-link">«</a></li>';
+        $j = 0;
+        for($i = 0; $i < $pageNumber ;$i++){
+            $paging .= '<li value="'.$i.'" class="page-item page-number ';
+            if($i == 0){ $paging .= 'active';}
+            $paging .= '"><a class="page-link">'.($i+1).'</a></li>';
+            $j = $i;
+        }
+        $paging .= '<li class="page-item" value="'.$j.'"><a class="page-link">»</a></li>';
+        echo json_encode(['tbody'=>$tbody,'paging'=>$paging]);
+    }
+
+    public function getpage(){
+        extract($_POST);
+        $result = $this->filelist->where("filename like '%$search%' limit $start,10");
+        $tbody = '';
+        while($row = $result->fetch_assoc()){
+            $tbody .= "<tr>
+                <td>{$row['filename']}</td>
+                <td style='width: 70px'>
+                    <div class='fw justify-between'>
+                        <i value='{$row['id']}' class='fas fa-eye'></i>
+                        <i hidden class='fas fa-file-download'></i>
+                    </div>
+                </td>
+            </tr>";
+        }
+        echo json_encode(['tbody'=>$tbody]);
     }
 
 }

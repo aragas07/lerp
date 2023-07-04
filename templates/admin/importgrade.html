@@ -6,6 +6,9 @@
         <div class="col-12 card">
             <div class="card-header text-center">
                 <h4 class="card-title">Import grade</h4>
+                <div class="card-tools">
+                    <button class="btn btn-success">List of File</button>
+                </div>
             </div>
             <div class="card-body">
                 <form id="csv" class="mb-3 col-8 m-auto">
@@ -70,7 +73,7 @@
                     type: 'post',
                     data: new FormData(this)
                 })
-
+                console.log(data)
                 data.format ? success(data):
                 Swal.fire({
                     title: 'Error!',
@@ -87,12 +90,10 @@
             }
             // sessionStorage.setItem("importgrade","")
             function success(data){
-                console.log("success")
                 htall.toast().fire(data.toast)
                 $("tbody").html(data.tbody)
                 $(".btn-warning").css('display','block')
                 $(".hidden").each(function(){
-                    console.log($(this).text())
                     $(this).attr('hidden',true)
                 })
                 htall.importGrade({store:true,data:$(".form-body").html()})
@@ -124,7 +125,14 @@
                 })
                 $(".modal").show()
             })
-
+            $(".btn-success").click(function(){
+                $(".modal-form").css({'width':'30%','min-width':'170px'})
+                $(".modal-head").children('h4').text("Summary")
+                $.get("templates/modal/filelist.html",function(e){
+                    $(".modal-body").html(e)
+                })
+                $(".modal").show()
+            })
             function viewing(){
                 $(".fa-eye").click(function(){
                     $(".modal-form").css({'width':'50%','min-width':'170px'})
@@ -147,6 +155,7 @@
             //     })
             //     htall.toast().fire(data)
             // })
+
         })
     </script>
 </div>

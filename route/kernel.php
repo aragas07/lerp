@@ -24,4 +24,7 @@
         case "importFile": $admin->importFile($_FILES["file"]); break;
         case "importGrade": $admin->importGrade($_POST['id'],$_POST['mock'],$_POST['gwa']); break;
         case "getperformance": $admin->getperformance(); break;
+        case "paging": $user->paging(); break;
+        case "getpage": $user->getpage(); break;
+        case "getdff": $admin->getdff(); break;
     }

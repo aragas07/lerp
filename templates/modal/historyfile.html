@@ -1,0 +1,44 @@
+<style>
+    table {
+        caret-color: transparent;
+        border-collapse: collapse;
+    }
+    .table-bordered {
+        border: 1px solid black;
+    }
+    th, td{
+        border: 1px solid black;
+    }
+    .table {
+        width: 100%;
+        margin-bottom: 1rem;
+        color: #212529;
+        background-color: transparent;
+    }
+</style>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID #</th>
+            <th>Name</th>
+            <th>Mock grades</th>
+            <th>GWA</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody id="filedatas"></tbody>
+</table>
+
+<script>
+    $(function(){
+        data = htall.getData({url:'route/getdff', data:{id:id}})
+        $("#filedatas").html(data.tbody)
+        $("#print").click(function(){
+            console.log($(".viewfile-body").html())
+            newWin = window.open("")
+            newWin.document.write($(".viewfile-body").html())
+            newWin.print()
+            newWin.close()
+        })
+    })
+</script>

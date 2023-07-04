@@ -14,6 +14,11 @@
     display: none;
 }
 
+.fa-search{
+    position: absolute;
+    margin: 7px 0 0 4px;
+    color: #777;
+}
 
 th{
     text-align: center;
@@ -21,6 +26,10 @@ th{
 
 table{
     caret-color: transparent;
+}
+
+td .fa-file-download{
+    cursor: pointer;
 }
 
 td .fa-eye{
@@ -101,7 +110,7 @@ a:hover .nav-icon{
 }
 
 
-.modal{
+.modal, .viewfile{
     position: fixed;
     top: 0;
     padding-top: 15px;
@@ -110,6 +119,13 @@ a:hover .nav-icon{
     background-color: #ffffff17;
     display: none;
     z-index: 3000;
+}
+
+
+
+.page-item>.page-link{
+    cursor: pointer;
+    caret-color: transparent;
 }
 
 .description-block>h1, .description-block>h3{
@@ -136,7 +152,7 @@ a:hover .nav-icon{
     }
 }
 
-.modal-form{
+.modal-form, .viewfile-form{
     background-color: #212529;
     border-radius: 4px;
     margin: auto;
@@ -166,7 +182,7 @@ a:hover .nav-icon{
 
 .grid-body>.col-4:hover .delete{
     display: flex;
-} 
+}
 
 .delete-icon{
     transform: rotate(45deg);
@@ -178,23 +194,36 @@ a:hover .nav-icon{
     transform: rotate(90deg);
 }
 
-.modal-head>h4{
+.modal-head>h4, .viewfile-head>h4{
     margin: 5px 0;
     height: 100%;
     display: flex;
     justify-content: center;
 }
-.modal-head{
+.modal-head, .viewfile-head{
     display: flex;
     justify-content: space-between;
     border-bottom: 1px solid #4e4e4e;
+}
+
+.fw{
+    width: 100%;
+}
+
+.fw>.fas{
+    font-size: 19px;
+}
+
+.justify-between{
+    display: flex;
+    justify-content: space-between;
 }
 
 .modal-tools{
     caret-color: transparent;
 }
 
-.modal-head, .modal-body{
+.modal-head, .modal-body, .viewfile-head, .viewfile-body{
     padding: 4px 10px;
     overflow: auto;
     max-height: 500px;

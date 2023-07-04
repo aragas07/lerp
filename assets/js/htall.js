@@ -26,7 +26,7 @@ class Htall extends Map{
         var output = ""
         $.ajax({
             url: d.url,
-            type: d.type,
+            type: 'POST',
             data: d.data,
             async: false,
             dataType: 'JSON',

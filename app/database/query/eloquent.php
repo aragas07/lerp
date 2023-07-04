@@ -18,6 +18,11 @@ class Eloquent{
         return $this->conn->query($query);
     }
 
+    public function insertfile($name){
+        $this->conn->query("INSERT INTO files (filename) VALUES('$name')");
+        return $this->conn->query("SELECT id FROM files ORDER BY id DESC LIMIT 1");
+    }
+
     public function join($table){
         $this->table = "$this->table INNER JOIN $table ON $this->table.id = $table.$this->table"."_id";
         return $this;
