@@ -4,11 +4,13 @@ class UserController{
     private $user;
     private $exams;
     private $filelist;
+    private $admin;
     public function __construct(){
         $this->examinee = new Examinee();
         $this->user = new Users();
         $this->exams = new Exams();
         $this->filelist = new Filelist();
+        $this->admin = new Admin();
     }
 
     public function login($email,$password){
@@ -26,7 +28,7 @@ class UserController{
         $isExist = $this->user->where("username = '$email'");
         if(mysqli_num_rows($isExist) == 0){
             if($this->user->insert("username,password,usertype,first_name,middle_name,last_name","'$email','$password','$usertype','$fname','$mname','$lname'")){
-                if($usertype == 'examinee'){
+                if($usertype == 'admin'){
                     $icon = 'success';
                     $success = true;
                     $msg = 'Verify your account';
@@ -35,7 +37,7 @@ class UserController{
                 $mail->mail($email);
                 $getId = $this->user->where("username = '$email'");
                 while($get = $getId->fetch_assoc()){
-                    $this->examinee->insert("users_id,register_date,idnumber",$get['id'].",now(),'$idnumber'");
+                    $this->admin->insert("users_id","{$get['id']}");
                 }
             }
         }
