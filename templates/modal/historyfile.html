@@ -34,11 +34,12 @@
         data = htall.getData({url:'route/getdff', data:{id:id}})
         $("#filedatas").html(data.tbody)
         $("#print").click(function(){
-            console.log(document.getElementById("filebody").innerHTML)
-            newWin = window.open("")
+            var mainbody = document.getElementById("mainbody").innerHTML
+            var newWin = window.open("")
             newWin.document.write(document.getElementById("filebody").innerHTML)
             newWin.print()
             newWin.close()
+            newWin.document.write(mainbody)
         })
     })
 </script>
