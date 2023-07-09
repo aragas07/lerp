@@ -61,25 +61,22 @@ class UserController{
         while($row = $result->fetch_assoc()){
             $tbody .= "<tr>
                 <td>{$row['filename']}</td>
-                <td style='width: 70px'>
-                    <div class='fw justify-between'>
-                        <i value='{$row['id']}' class='fas fa-eye'></i>
-                        <i hidden class='fas fa-file-download'></i>
-                    </div>
+                <td style='width: 70px; text-align: center'>
+                    <i value='{$row['id']}' class='fas fa-eye'></i>
                 </td>
             </tr>";
         }
         $rownum = $this->filelist->where("filename like '%$search%'");
         $pageNumber = ceil($rownum->num_rows/10);
         $paging = '<li class="page-item" value="0"><a class="page-link">«</a></li>';
-        $j = 0;
+        $t = 0;
         for($i = 0; $i < $pageNumber ;$i++){
-            $paging .= '<li value="'.$i.'" class="page-item page-number ';
+            $t = $i*10;
+            $paging .= '<li value="'.$t.'" class="page-item page-number ';
             if($i == 0){ $paging .= 'active';}
             $paging .= '"><a class="page-link">'.($i+1).'</a></li>';
-            $j = $i;
         }
-        $paging .= '<li class="page-item" value="'.$j.'"><a class="page-link">»</a></li>';
+        $paging .= '<li class="page-item" value="'.$t.'"><a class="page-link">»</a></li>';
         echo json_encode(['tbody'=>$tbody,'paging'=>$paging]);
     }
 
@@ -90,15 +87,12 @@ class UserController{
         while($row = $result->fetch_assoc()){
             $tbody .= "<tr>
                 <td>{$row['filename']}</td>
-                <td style='width: 70px'>
-                    <div class='fw justify-between'>
-                        <i value='{$row['id']}' class='fas fa-eye'></i>
-                        <i hidden class='fas fa-file-download'></i>
-                    </div>
+                <td style='width: 70px; text-align: center'>
+                    <i value='{$row['id']}' class='fas fa-eye'></i>
                 </td>
             </tr>";
         }
-        echo json_encode(['tbody'=>$tbody]);
+        echo json_encode(['tbody'=>$tbody,'start'=>$start]);
     }
 
 }

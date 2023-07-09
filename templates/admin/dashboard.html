@@ -3,39 +3,28 @@
 <div id="extend">
   <div class="container-fluid">
     <div class="row">
-      <a href="adminperformance" class="col-12 col-sm-6">
-        <div class="info-box">
-          <span class="info-box-icon bg-info elevation-1"><i class="fas fa-chart-line"></i></span>
+      <div class="col-sm-3 col-12">
+        <a href="adminperformance" class="col-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-primary elevation-1"><i class="fas fa-chart-line"></i></span>
 
-          <div class="info-box-content">
-            <span class="info-box-text">Performance</span>
+            <div class="info-box-content">
+              <span class="info-box-text text-dark">Performance</span>
+            </div>
           </div>
-        </div>
-      </a>
-      <!-- <a href="adminperformance" class="col-12 col-sm-6">
-        <div class="info-box mb-3">
-          <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-chart-line"></i></span>
+        </a>
+        <a href="importgrade" class="col-12">
+          <div class="info-box mb-3">
+            <span class="info-box-icon bg-success elevation-1"><i class="fas fa-file-import"></i></span>
 
-          <div class="info-box-content">
-            <span class="info-box-text">Performance</span>
+            <div class="info-box-content">
+              <span class="info-box-text text-dark">Import grades</span>
+            </div>
           </div>
-        </div>
-      </a> -->
-      <div class="clearfix hidden-md-up"></div>
-
-      <a href="importgrade" class="col-12 col-sm-6">
-        <div class="info-box mb-3">
-          <span class="info-box-icon bg-success elevation-1"><i class="fas fa-file-import"></i></span>
-
-          <div class="info-box-content">
-            <span class="info-box-text">Import grades</span>
-          </div>
-        </div>
-      </a>
-    </div>
+        </a>
+      </div>
     
-    <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-9">
         <div class="card">
           <div class="card-body">
             <div class="row">
@@ -45,9 +34,33 @@
                 </p>
 
                 <div class="chart">
-                  <canvas id="salesChart" height="300"></canvas>
+                  <canvas id="salesChart" height="200"></canvas>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-12">
+            <p class="text-center">
+              <strong>Summary</strong>
+            </p>
+
+            <div class="chart">
+              <canvas id="chart" height="300"></canvas>
+            </div>
+            <div class="d-flex flex-row justify-content-end">
+              <span class="mr-2">
+                <i class="fas fa-square text-primary"></i> Passed
+              </span>
+
+              <span>
+                <i class="fas fa-square text-gray"></i> Failed
+              </span>
             </div>
           </div>
         </div>
@@ -57,52 +70,52 @@
   <script src="bootstrap/chart.js/chart.min.js"></script>
   <script>
       $(function () {
-        var dashboard = htall.getData({
-          url: 'route/adminDashboard',
-          type: 'post'
-        }),
+        var dashboard = htall.getData({url: 'route/adminDashboard'}),
         mock = 0,
         entrance = 0,
         mocktotal = 0,
         entrancetotal = 0,
-        label = dashboard.year,
+        yearlabel = dashboard.year,
         data = dashboard.count,
-        entrancedata = []
-        console.log(dashboard)
-        for(var i = 0; i < Object.keys(dashboard).length ;i++){
-          // var year = dashboard[i].year
-        }
-        // for(var i = 0; i < Object.keys(dashboard).length ;i++){
-        //   var date = new Date(dashboard[i].register_date)
-        //   var year = date.getFullYear()
-        //   if(label.length == 0){
-        //     label.push(year)
-        //     data.push(1)
-        //   }else
-        //     for(var j = 0; j < label.length ;j++){
-        //       if(label[j] == year){
-        //       }else{
-        //         if(j+1 == label.length){
-        //           label.push(year)
-        //           data.push(1)
-        //         }
-        //       }
-        //     }
-        //   if(dashboard[i].mock_exam != 0) mocktotal++
-        //   if(dashboard[i].entrance_exam != 0) entrancetotal++
-        // }
-  
-        // console.log("dashboard : "+label)
-        // $("#mocklabel").html("<b>"+mock+"/</b>"+mocktotal)
-        // $("#suastlabel").html("<b>"+entrance+"/</b>"+entrancetotal)
-        // $("#mock").css('width',(mock/mocktotal)*100+"%")
-        // $("#suast").css('width',(entrance/entrancetotal)*100+"%")
-  
-        
-        var salesChartCanvas = $('#salesChart').get(0).getContext('2d')
-          
-        var salesChartData = {
-          labels: label,
+        entrancedata = [],
+        label = [],
+        arraypass = [],
+        arrayfail = []
+
+        $.each(dashboard.chart,function(e,val){
+          gwa = parseFloat(val.gwa)
+          gwapercent = (1/gwa)*100
+          mock = (val.mock_exam/100)*100
+          avg = ((gwapercent+mock)/200)*100
+          if(label.length == 0){
+            label.push(val.course)
+            arraypass.push(0)
+            arrayfail.push(0)
+          }
+          for(i = 0; i < label.length ;i++){
+            if(label[i] == val.course){
+              avg > 44.87 ? arraypass[i]++:arrayfail[i]++
+              break
+            }else{
+              if(i+1 == label.length){
+                label.push(val.course)
+                arraypass.push(0)
+                arrayfail.push(0)
+              }
+            }
+          }
+        })
+
+        var salesChartCanvas = $('#salesChart').get(0).getContext('2d'),
+        summarychart = $("#chart"),
+        ticksStyle = {
+          fontColor: '#495057',
+          fontStyle: 'bold'
+        },
+        mode = 'index',
+        intersect = true,
+        salesChartData = {
+          labels: yearlabel,
           datasets: [
             {
               label: 'Mock Exam',
@@ -116,9 +129,8 @@
               data: data
             }
           ]
-        }
-  
-        var salesChartOptions = {
+        },
+        salesChartOptions = {
           maintainAspectRatio: false,
           responsive: true,
           legend: {
@@ -136,13 +148,67 @@
               }
             }]
           }
-        }
-  
+        },
+        chartdata = new Chart(summarychart, {
+          type: 'bar',
+          data: {
+            labels: label,
+            datasets: [
+              {
+                backgroundColor: '#007bff',
+                data: arraypass
+              },
+              {
+                backgroundColor: '#ced4da',
+                data: arrayfail
+              }
+            ]
+          },
+          options: {
+            maintainAspectRatio: false,
+            tooltips: {
+              mode: mode,
+              intersect: intersect
+            },
+            hover: {
+              mode: mode,
+              intersect: intersect
+            },
+            legend: {
+              display: false
+            },
+            scales: {
+              yAxes: [{
+                gridLines: {
+                  display: true,
+                  lineWidth: '4px',
+                  color: 'rgba(0, 0, 0, .2)',
+                  zeroLineColor: 'transparent'
+                },
+                ticks: $.extend({
+                  beginAtZero: true,
+
+                  callback: function (value) {
+                    return value
+                  }
+                }, ticksStyle)
+              }],
+              xAxes: [{
+                display: true,
+                gridLines: {
+                  display: false
+                },
+                ticks: ticksStyle
+              }]
+            }
+          }
+        })
         var salesChart = new Chart(salesChartCanvas, {
           type: 'line',
           data: salesChartData,
           options: salesChartOptions
         })
+        console.log(dashboard)
       })
   
   </script>

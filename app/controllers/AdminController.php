@@ -103,7 +103,7 @@ class AdminController{
         $data = $this->user->join('examinee')->where("YEAR(register_date) = '$year' and register_date is not null and (first_name like '%$search%' or middle_name like '%$search%' or last_name like '%$search%' or home_address like '%$search%' or idnumber like '%$search%')");
         $tbody = "";
         while($d = $data->fetch_assoc()){
-            $bday = new DateTime($d['birth']); 
+            $bday = new DateTime($d['birth']);
             $today = new Datetime(date('m.d.y'));
             $diff = $today->diff($bday);
             $name = $d['last_name']." ".$d['first_name']." ".$d['middle_name'];
@@ -176,12 +176,17 @@ class AdminController{
     }
 
     public function dashboard(){
-        $mockData = $this->exams->query("SELECT count(*) AS count,year FROM exams GROUP BY year");
+        $mockData = $this->exams->query("SELECT count(*) AS count,ay FROM exams GROUP BY ay");
         while($get = $mockData->fetch_assoc()){
             $count[] = $get['count'];
-            $year[] = $get['year'];
+            $year[] = $get['ay'];
         }
-        echo json_encode(['count'=>$count, 'year'=>$year]);
+        $result = $this->exams->all();
+        $chart = [];
+        while($row = $result->fetch_assoc()){
+            $chart[] = $row;
+        }
+        echo json_encode(['count'=>$count, 'year'=>$year, 'chart'=>$chart]);
     }
 
     public function importFile($file){
@@ -200,21 +205,24 @@ class AdminController{
                 $title = 'The file has been successfully uploaded';
                 $idn = strtolower($getData[0]);
                 if($num == 0){
-                    if(($idn != 'id #' && $idn != 'id#') || strtolower($getData[1]) != 'name' || strtolower($getData[2]) != 'mock grades' || strtolower($getData[3]) != 'gwa'){
+                    if(($idn != 'id #' && $idn != 'id#') || strtolower($getData[1]) != 'name' ||
+                    strtolower($getData[2]) != 'mock grades' || strtolower($getData[3]) != 'gwa' ||
+                    strtolower($getData[4]) != 'ay' || strtolower($getData[5]) != 'course'){
                         $title = 'We are unable to import the file due to file format, you need to follow the format.';
                         break;
                     }
                 }else if($num > 0){
-                    $tbody .= "<tr>
-                        <td>".$getData[0]."</td>
-                        <td>".$getData[1]."</td>
-                        <td>".$getData[2]."</td>
-                        <td>".$getData[3]."</td>
+                    $tbody .= "<tr class='item'>
+                        <td>{$getData[0]}</td>
+                        <td>{$getData[1]}</td>
+                        <td>{$getData[2]}</td>
+                        <td>{$getData[3]}</td>
+                        <td>{$getData[5]}</td>
                         <td hidden class='hidden'></td>
                         <td hidden class='text-center hidden'><i class='fas fa-eye'></i></td>
                     </tr>";
                     $format = true;
-                    $this->exams->insert("examinee_id,name,mock_exam,gwa,year,files_id","'".$getData[0]."','".$getData[1]."','".$getData[2]."','".$getData[3]."',YEAR(CURDATE()),{$fileid['id']}");
+                    $this->exams->insert("examinee_id,name,mock_exam,gwa,ay,course,files_id","'{$getData[0]}','{$getData[1]}','{$getData[2]}','{$getData[3]}','{$getData[4]}','{$getData[5]}',{$fileid['id']}");
                 }
                 $num++;
             }

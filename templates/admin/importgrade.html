@@ -23,7 +23,7 @@
                     </div>
                     <div class="col-12 text-center">
                         <h1>You must follow the file format</h1>
-                        <h3>ID #, Name, Mock grades, GWA</h3>
+                        <h3>ID #, Name, Mock grades, GWA, Ay, Course</h3>
                     </div>
                 </form>
                 <!-- <form id="manual" class="mt-5">
@@ -45,16 +45,23 @@
                     <button class="btn btn-primary mt-3 float-right">Submit</button>
                 </form> -->
                 <div class="form-body">
-                    <button class="btn btn-warning hdn float-right mb-3 text-light">Predict</button>
-                    <button class="btn btn-info hdn mb-3"><i class="fas fa-chart-line mr-2"></i> Summary</button>
-                    <table class="table table-bordered">
+                    <div id="btn-cont" style="display: flex; justify-content: right;margin: 19px 0 10px 0">
+                        <button class="btn hdn btn-info"><i class="fas fa-chart-line mr-2"></i> Summary</button>
+                        <div class="radios hdn">
+                            <label class="m-0"><input type="radio" name="filter" class="mr-1 ml-3" checked value="Passed"> Passed</label>
+                            <label class="m-0"><input type="radio" name="filter" class="mr-1 ml-3" value="Failed"> Failed</label>
+                        </div>
+                        <button class="btn btn-warning hdn text-light">Predict</button>
+                    </div>
+                    <table id="mytable" class="table table-bordered table-hover sortable">
                         <thead>
                             <tr>
                                 <th>ID #</th>
                                 <th>Name</th>
-                                <th>Mock grades</th>
-                                <th>GWA</th>
-                                <th hidden class="hidden">Status</th>
+                                <th class="sorting">Mock grades</th>
+                                <th class="sorting">GWA</th>
+                                <th>Course</th>
+                                <th hidden class="hidden">Prediction</th>
                                 <th hidden class="hidden" style="width: 30px">View</th>
                             </tr>
                         </thead>
@@ -80,18 +87,21 @@
                     text: data.toast.title,
                     imageUrl: './assets/img/instruction1.png',
                     imageWidth: 400,
-                    imageHeight: 180,
+                    imageHeight: 150,
                     imageAlt: 'Custom image',
                 })
             })
+
             if(htall.importGrade({store:false})){
                 $(".form-body").html(htall.importGrade({store:false}))
                 viewing()
-            }
+                sorting()
+            }else
+                sorting()
             // sessionStorage.setItem("importgrade","")
             function success(data){
                 htall.toast().fire(data.toast)
-                $("tbody").html(data.tbody)
+                $("#mytable>tbody").html(data.tbody)
                 $(".btn-warning").css('display','block')
                 $(".hidden").each(function(){
                     $(this).attr('hidden',true)
@@ -100,34 +110,38 @@
             }
             $(".btn-warning").click(function(){
                 $(".btn-info").css('display','block')
+                $(".radios").css('display','block')
+                $("#btn-cont").css('justify-content','space-between')
                 $(".hidden").each(function(){
                     $(this).attr('hidden',false)
                 })
-                $("tbody>tr").each(function(){
+                $("#mytable>tbody>tr").each(function(){
                     var da = $(this).children().eq(3).text(),
-                    gwa = parseFloat(da)
+                    gwa = parseFloat(da),
                     gwapercent = (1/gwa)*100,
                     mock = ($(this).children().eq(2).text()/100)*100,
-                    avg = ((gwapercent+mock)/200)*100
-                    $(this).children().eq(4).text(avg > 44.87 ? "Passed":"Failed")
+                    avg = ((gwapercent+mock)/200)*100,
+                    bo = avg > 44.87
+                    $(this).children().eq(5).text(bo ? "Passed":"Failed")
+                    if(!bo) $(this).hide()
                 })
                 viewing()
                 htall.importGrade({store:true,data:$(".form-body").html()})
             })
 
             $(".btn-info").click(function(){
-                $(".modal-form").css({'width':'30%','min-width':'170px'})
+                $(".modal-form").css({'width':'80%','min-width':'170px'})
                 $(".modal-head").children('h4').text("Summary")
-                var object = $("tbody>tr")
+                var object = $("#mytable>tbody>tr")
                 $.get("templates/modal/summary.html",function(e){
-                    objects = object
+                    obj = object
                     $(".modal-body").html(e)
                 })
                 $(".modal").show()
             })
             $(".btn-success").click(function(){
                 $(".modal-form").css({'width':'30%','min-width':'170px'})
-                $(".modal-head").children('h4').text("Summary")
+                $(".modal-head").children('h4').text("List of files")
                 $.get("templates/modal/filelist.html",function(e){
                     $(".modal-body").html(e)
                 })
@@ -145,6 +159,43 @@
                     $(".modal").show()
                 })
             }
+            function sorting(){
+                $(".sorting").each(function(i){
+                    $(this).click(function(){
+                        var ind = $(this).index(),
+                        tr = [],
+                        bo = $(this).attr("class") == 'sorting after'
+                        $("#mytable>tbody>tr").each(function(){
+                            tr.push($(this))
+                        })
+                        $.each(tr,function(i,val){
+                            for(var j = 0; j < tr.length-1 ;j++){
+                                var a = parseFloat(tr[j].children().eq(ind).text()),
+                                b = parseFloat(tr[j+1].children().eq(ind).text())
+                                if(bo ? a > b:a < b){
+                                    var temp = tr[j]
+                                    tr[j] = tr[j+1]
+                                    tr[j+1] = temp
+                                }
+                            }
+                        })
+                        $("#mytable>tbody").html(tr)
+                        $(this).attr("class",bo ? 'sorting before':'sorting after')
+                    })
+                })
+                $("input[name='filter']").click(function(){
+                    var text = $(this).val()
+                    $("#mytable>tbody>tr").each(function(){
+                        if($(this).children().eq(5).text() == text){
+                            $(this).show()
+                        }else{
+                            $(this).hide()
+                        }
+                    })
+                })
+            }
+
+
             // Swal.fire({title:"Please import a file that should be used in prediction"})
             // $("#manual").submit(function(e){
             //     e.preventDefault()
@@ -155,7 +206,7 @@
             //     })
             //     htall.toast().fire(data)
             // })
-
+            
         })
     </script>
 </div>

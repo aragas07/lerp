@@ -10,6 +10,33 @@
     align-items: center;
 }
 
+.sorting{
+    cursor: pointer!important;
+    position:relative;
+}
+
+.sorting::after{
+    right: 10px;
+    position: absolute;
+    content: "↑";
+    color: #777;
+}
+
+.sorting::before{
+    right: 20px;
+    position: absolute;
+    content: "↓";
+    color: #777;
+}
+
+.after::after{
+    color: #000!important;
+}
+
+.before::before{
+    color: #000!important;
+}
+
 .hdn{
     display: none;
 }
@@ -34,7 +61,7 @@ td .fa-file-download{
 
 td .fa-eye{
     cursor:pointer;
-    color: #43fa89e7;
+    color: #43bdfae7;
 }
 
 .fa-eye:hover{
@@ -116,7 +143,7 @@ a:hover .nav-icon{
     padding-top: 15px;
     height: 100vh;
     width: 100%;
-    background-color: #ffffff17;
+    background-color: #00000037;
     display: none;
     z-index: 3000;
 }
@@ -153,7 +180,7 @@ a:hover .nav-icon{
 }
 
 .modal-form, .viewfile-form{
-    background-color: #212529;
+    background-color: white;
     border-radius: 4px;
     margin: auto;
     width: fit-content;
@@ -164,7 +191,7 @@ a:hover .nav-icon{
 .delete-icon, .delete-icon:after{
     height: 13px;
     width: 3px;
-    background-color: #eee;
+    background-color: #777;
 }
 
 .modal-tools{
@@ -203,7 +230,7 @@ a:hover .nav-icon{
 .modal-head, .viewfile-head{
     display: flex;
     justify-content: space-between;
-    border-bottom: 1px solid #4e4e4e;
+    border-bottom: 1px solid #aaa;
 }
 
 .fw{

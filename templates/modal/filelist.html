@@ -17,7 +17,7 @@
         </tr>
     </tbody>
 </table>
-<div class="card-footer clearfix pt-0 pr-0">
+<div class="clearfix pt-0 pr-0 mb-2">
     <ul class="pagination pagination-sm m-0 float-right">
     </ul>
   </div>
@@ -43,7 +43,7 @@
             $(".fa-eye").click(function(){
                 $(".viewfile").show()
                 $(".viewfile-form").css({'width':'70%','min-width':'170px'})
-                $(".viewfile-head").children('h4').text($(this).parent().parent().siblings().text())
+                $(".viewfile-head").children('h4').text($(this).parent().parent().text())
                 sid = $(this).attr("value")
                 $.get("templates/modal/historyfile.html", function(e){
                     id = sid

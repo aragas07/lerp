@@ -56,6 +56,7 @@ class Htall extends Map{
     }
 
     importGrade(d){
+        // sessionStorage.setItem("importgrade",'')
         if(d.store) sessionStorage.setItem("importgrade",d.data)
         else{
             return sessionStorage.getItem("importgrade")
@@ -66,7 +67,7 @@ class Htall extends Map{
         const extend = $("#extend").html()
         $("#extend").empty()
         $.get(`templates/${main}`,function(e){
-            $("body").attr('class',"hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed")
+            $("body").attr('class',"hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed")
             $("#component").html(e)
             $("#include").html(extend)
         })

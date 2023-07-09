@@ -1,6 +1,6 @@
 
 <div class="col-md-12" style="display: flex; align-items: center;">
-    <div class="col-12">
+    <div hidden class="col-12">
         <div class="progress-group">
             Passed
             <span id="mocklabel" class="float-right"><b></b></span>
@@ -17,6 +17,12 @@
             </div>
         </div>
     </div>
+    <div class="col-md-12 pt-3">
+        <div class="chart">
+            <canvas id="chart" height="350"></canvas>
+        </div>
+    </div>
+</div>
 </div>
 <div class="card-footer">
     <div class="row">
@@ -31,7 +37,7 @@
         <!-- /.col -->
         <div class="col-sm-6">
             <div class="description-block">
-                <span class="description-percentage text-warning">0%</span>
+                <span class="description-percentage text-danger">0%</span>
                 <h5 class="description-header"></h5>
                 <span class="description-text">Failed</span>
             </div>
@@ -41,19 +47,41 @@
     <!-- /.row -->
 </div>
 
+<script src="bootstrap/chart.js/chart.min.js"></script>
 <script>
     $(function(){
         total = 0
         pass = 0
         fail = 0
-        objects.each(function(){
+        label = []
+        arraypass = []
+        arrayfail = []
+        obj.each(function(){
             total++
-            da = $(this).children().eq(3).text(),
+            object = $(this).children()
+            da = object.eq(3).text()
             gwa = parseFloat(da)
-            gwapercent = (1/gwa)*100,
-            mock = ($(this).children().eq(2).text()/100)*100,
+            gwapercent = (1/gwa)*100
+            mock = (object.eq(2).text()/100)*100
             avg = ((gwapercent+mock)/200)*100
             avg > 44.87 ? pass++:fail++
+            if(label.length == 0){
+                label.push(object.eq(4).text())
+                arraypass.push(0)
+                arrayfail.push(0)
+            }
+            for(i = 0; i < label.length ;i++){
+                if(label[i] == object.eq(4).text()){
+                    avg > 44.87 ? arraypass[i]++:arrayfail[i]++
+                    break
+                }else{
+                    if(i+1 == label.length){
+                        label.push(object.eq(4).text())
+                        arraypass.push(0)
+                        arrayfail.push(0)
+                    }
+                }
+            }
         })
         perpass = (pass/total)*100
         perfail = (fail/total)*100
@@ -62,7 +90,86 @@
         $("#passed").css('width',perpass+"%")
         $("#failed").css('width',perfail+"%")
         $(".text-success").html(perpass.toFixed(2)+"%")
-        $(".text-warning").html(perfail.toFixed(2)+"%")
+        $(".text-danger").html(perfail.toFixed(2)+"%")
 
+        summarychart = $("#chart"),
+        ticksStyle = {
+            fontColor: '#495057',
+            fontStyle: 'bold'
+        },
+        mode = 'index',
+        intersect = true,
+        chartdata = new Chart(summarychart, {
+            type: 'bar',
+            data: {
+                labels: label,
+                datasets: [
+                {
+                    backgroundColor: '#007bff',
+                    data: arraypass,
+                    label: 'Passed'
+                },
+                {
+                    backgroundColor: '#ced4da',
+                    data: arrayfail,
+                    label: 'Failed'
+                }
+                ]
+            },
+            options: {
+                maintainAspectRatio: false,
+                tooltips: {
+                    mode: mode,
+                    intersect: intersect
+                },
+                hover: {
+                    mode: mode,
+                    intersect: intersect
+                },
+                legend: {
+                    display: true
+                },
+                scales: {
+                    yAxes: [{
+                        // display: false,
+                        gridLines: {
+                        display: true,
+                        lineWidth: '4px',
+                        color: 'rgba(0, 0, 0, .2)',
+                        zeroLineColor: 'transparent'
+                        },
+                        ticks: $.extend({
+                            beginAtZero: true,
+                            callback: function (value) {
+
+                                return value
+                            }
+                        }, ticksStyle)
+                    }],
+                    xAxes: [{
+                        display: true,
+                        gridLines: {
+                        display: false
+                        },
+                        ticks: ticksStyle
+                    }]
+                }
+            }
+        })
+        summarychart.click(function(click){
+            const points = chartdata.getElementsAtEventForMode(click,'nearest',{intersect: true},true)
+            console.log(points)
+            if(points.length){
+                const value = points[0]._model.label
+                $(".viewfile-form").css({'width':'70%','min-width':'170px'})
+                $(".viewfile-head>h4").text(value)
+                $("#print").hide()
+                $.get("templates/modal/summarytable.html",function(e){
+                    course = value
+                    $(".viewfile-body").html(e)
+                })
+                $(".viewfile").show()
+            }
+        })
     })
 </script>
