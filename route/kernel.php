@@ -5,7 +5,7 @@
     $admin = new AdminController();
     switch($url[2]){
         case "login": $user->login($_POST['email'],md5($_POST['password'])); break;
-        case "register": $user->register(ucfirst($_POST['fname']),ucfirst($_POST['mname']),ucfirst($_POST['lname']),$_POST['email'],md5($_POST['password']),$_POST['usertype'],$_POST['idnumber']); break;
+        case "register": $user->register(ucfirst($_POST['fname']),ucfirst($_POST['mname']),ucfirst($_POST['lname']),$_POST['email'],md5($_POST['password']),$_POST['usertype']); break;
         case "verify": $user->verify($_POST['code'],$_SESSION['email'],$_SESSION['password']); break;
         case "getGrades": $examinee->getGrades($_POST['id']); break;
         case "getSubject": $admin->getSubject(); break;

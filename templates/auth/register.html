@@ -10,9 +10,6 @@
                 <p class="login-box-msg">LICENSURE EXAMINATION RESULTS PREDICTION</p>
                 <form>
                     <div class="input-group mb-3">
-                        <input required type="text" class="form-control" maxlength="9" name="idnumber" placeholder="ID number">
-                    </div>
-                    <div class="input-group mb-3">
                         <input required type="text" class="form-control" name="fname" placeholder="First name">
                     </div>
                     <div class="input-group mb-3">
@@ -78,6 +75,7 @@
                     type: 'post',
                     data: new FormData(this)
                 })
+                console.log(register)
                 register.success ? htall.location({auth:'verifying',href:'/verify'}):htall.swal(register)
             }else{
                 $("#invalid").show()

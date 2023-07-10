@@ -17,7 +17,7 @@ class UserController{
         echo $this->user->login($email,$password);
     }
 
-    public function register($fname,$mname,$lname,$email,$password,$usertype,$idnumber){
+    public function register($fname,$mname,$lname,$email,$password,$usertype){
         $success = false;
         $icon = 'error';
         $msg = "Sorry $email is already exist";

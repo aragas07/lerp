@@ -19,7 +19,7 @@ class Mailer{
             $mail->SMTPSecure = 'tls';
             $mail->Port       = 587;
             
-            $mail->setFrom('argieragasd8d7@gmail.com', 'LERP');
+            $mail->setFrom('emilyatuba@gmail.com', 'LERP');
             $code = rand(10000, 99999);
             $_SESSION['code'] = $code;
             $mail->addAddress($email);
