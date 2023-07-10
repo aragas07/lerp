@@ -26,6 +26,10 @@
             var child = $(this).children()
             child.eq(4).hide()
             child.eq(6).hide()
+            if(course != child.eq(4).text()){
+                console.log(course+" == "+child.eq(4).text())
+            $(this).hide()
+            }
         })
     })
 </script>
