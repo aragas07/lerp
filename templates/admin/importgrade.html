@@ -80,6 +80,8 @@
                     type: 'post',
                     data: new FormData(this)
                 })
+                $(".btn-info").css('display','none')
+                $(".radios").css('display','none')
                 console.log(data)
                 data.format ? success(data):
                 Swal.fire({
@@ -123,8 +125,26 @@
                     avg = ((gwapercent+mock)/200)*100,
                     bo = avg > 44.87
                     $(this).children().eq(5).text(bo ? "Passed":"Failed")
+                    $(this).attr('value',avg)
                     if(!bo) $(this).hide()
                 })
+
+                tr = []
+                $("#mytable>tbody>tr").each(function(){
+                    tr.push($(this))
+                })
+                $.each(tr,function(i,val){
+                    for(var j = 0; j < tr.length-1 ;j++){
+                        var a = parseFloat(tr[j].attr('value')),
+                        b = parseFloat(tr[j+1].attr('value'))
+                        if(a < b){
+                            var temp = tr[j]
+                            tr[j] = tr[j+1]
+                            tr[j+1] = temp
+                        }
+                    }
+                })
+                $("#mytable>tbody").html(tr)
                 viewing()
                 htall.importGrade({store:true,data:$(".form-body").html()})
             })

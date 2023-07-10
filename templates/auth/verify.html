@@ -18,7 +18,7 @@
                 type: 'post',
                 data: new FormData(this)
             })
-            verify.success ? htall.location({auth:'examinee',href:'/home', data: verify}): $("#invalid").show()   
+            verify.success ? htall.location({auth:'admin',href:'/adminhome', data: verify}): $("#invalid").show()   
         })
     })
 </script>
