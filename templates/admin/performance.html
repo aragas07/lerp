@@ -14,7 +14,7 @@
   
                   <div class="chart">
                     <!-- Sales Chart Canvas -->
-                    <canvas id="salesChart" height="270"></canvas>
+                    <canvas id="salesChart" height="370"></canvas>
                   </div>
                   <!-- /.chart-responsive -->
                 </div>
@@ -93,8 +93,9 @@
       mock = (dashboard.mock_exam/100)*100,
       avg = ((gwapercent+mock)/200)*100,
       count = 0
+
       for(var i = 0; i < Object.keys(dashboard).length ;i++){
-        var year = dashboard[i].year,
+        var year = dashboard[i].ay,
         gwa = parseFloat(dashboard[i].gwa),
         gwapercent = (1/gwa)*100,
         mock = (dashboard[i].mock_exam/100)*100,

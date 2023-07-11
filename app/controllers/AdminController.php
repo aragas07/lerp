@@ -237,7 +237,7 @@ class AdminController{
     }
 
     public function getperformance(){
-        $res = $this->exams->query("SELECT * FROM exams ORDER BY year ASC");
+        $res = $this->exams->query("SELECT * FROM exams ORDER BY ay ASC");
         while($r = $res->fetch_assoc()){
             $data[] = $r;
         }
